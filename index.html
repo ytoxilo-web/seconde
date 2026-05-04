@@ -595,6 +595,18 @@
       color: #b9ecff;
     }
 
+    .chat-tag {
+      margin-left: 5px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: white;
+      font-size: 11px;
+      font-weight: 900;
+      line-height: 1.2;
+      text-transform: uppercase;
+      vertical-align: middle;
+    }
+
     .forum-message-date {
       color: var(--muted);
       font-size: 0.78rem;
@@ -1229,6 +1241,90 @@
       color: #fecaca;
     }
 
+    .tag-admin-panel {
+      display: none;
+      margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+    }
+
+    .tag-admin-panel.is-visible {
+      display: block;
+    }
+
+    .tag-admin-panel h3 {
+      margin: 0 0 12px;
+      font-size: 1rem;
+    }
+
+    .tag-admin-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .tag-admin-box {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .tag-list,
+    .user-tag-list {
+      display: grid;
+      gap: 10px;
+      max-height: 310px;
+      overflow: auto;
+    }
+
+    .tag-admin-item {
+      padding: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius);
+      background: rgba(0, 0, 0, 0.18);
+    }
+
+    .tag-admin-item h4 {
+      margin: 0 0 6px;
+      font-size: 0.95rem;
+    }
+
+    .tag-admin-item p {
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+
+    .tag-admin-actions,
+    .user-tag-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .user-tag-options label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin: 0;
+      padding: 6px 8px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+      font-size: 0.82rem;
+      cursor: pointer;
+    }
+
+    .user-tag-options input {
+      width: auto;
+      min-height: auto;
+      margin: 0;
+    }
+
     .form-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -1337,6 +1433,10 @@
       }
 
       .forum-form {
+        grid-template-columns: 1fr;
+      }
+
+      .tag-admin-grid {
         grid-template-columns: 1fr;
       }
 
@@ -1967,6 +2067,39 @@
             <input id="usernameColorPicker" type="color" value="#b9ecff" aria-label="Couleur du pseudo">
           </div>
           <p class="profile-status" id="profileStatus">Couleur de pseudo prete.</p>
+        </div>
+
+        <div class="tag-admin-panel" id="tagAdminPanel">
+          <h3>Gestion des tags</h3>
+          <p class="profile-status" id="tagAdminStatus">Reserve aux administrateurs Firebase.</p>
+
+          <form id="tagForm">
+            <input id="editingTagId" type="hidden" value="">
+
+            <label for="tagName">Nom du tag</label>
+            <input id="tagName" type="text" placeholder="Ex: VIP" required>
+
+            <label for="tagColor">Couleur du tag</label>
+            <input id="tagColor" type="color" value="#ffcc00">
+
+            <label for="tagDescription">Description</label>
+            <textarea id="tagDescription" placeholder="Ex: Membre premium"></textarea>
+
+            <button class="btn" type="submit" id="saveTag">Creer le tag</button>
+            <button class="btn secondary" type="button" id="cancelTagEdit">Annuler</button>
+          </form>
+
+          <div class="tag-admin-grid">
+            <div class="tag-admin-box">
+              <h3>Tags</h3>
+              <div class="tag-list" id="tagList"></div>
+            </div>
+
+            <div class="tag-admin-box">
+              <h3>Utilisateurs</h3>
+              <div class="user-tag-list" id="userTagList"></div>
+            </div>
+          </div>
         </div>
 
         <button class="btn secondary" type="button" id="logoutAccount">Se deconnecter</button>
