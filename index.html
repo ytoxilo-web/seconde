@@ -3086,15 +3086,7 @@
     initVisitorGate();
   </script>
   <script type="module">
-    const firebaseConfig = {
-      apiKey: "AIzaSyDzyz3FXGXQMKnRNneXuvcWB_m5sLCFx6M",
-      authDomain: "nd-64612.firebaseapp.com",
-      projectId: "nd-64612",
-      storageBucket: "nd-64612.firebasestorage.app",
-      messagingSenderId: "665169411169",
-      appId: "1:665169411169:web:60a1b0e7f33e4bce6b7e20",
-      measurementId: "G-1TSX99RNLS"
-    };
+    import { firebaseConfig } from "./firebase-config.js";
 
     const authModal = document.querySelector("#authModal");
     const openAuth = document.querySelector("#openAuth");
@@ -3232,7 +3224,7 @@
     if (!firebaseIsConfigured) {
       setFormsDisabled(true);
       accountStatus.textContent = "";
-      setAuthStatus("Firebase n'est pas encore configure. Remplis firebaseConfig dans le fichier HTML.", true);
+      setAuthStatus("Firebase n'est pas encore configure. Remplis firebase-config.js.", true);
     } else {
       initFirebaseAuth();
     }
