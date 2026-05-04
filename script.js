@@ -59,6 +59,10 @@ function setProfileStatus(message, isError = false) {
   profilePictureStatus.classList.toggle("is-error", isError);
 }
 
+function firebaseErrorText(error) {
+  return error?.code ? `${error.code} - ${error.message}` : "Erreur Firebase inconnue.";
+}
+
 function getPseudo(user) {
   if (user.displayName) return user.displayName;
   if (user.email) return user.email.split("@")[0];
@@ -132,7 +136,8 @@ async function loadUserProfile(user) {
     showAvatar(photoURL, userData.pseudo || getPseudo(user));
     setProfileStatus(photoURL ? "Photo de profil chargee." : "Choisis une image pour afficher un avatar rond.");
   } catch (error) {
-    setProfileStatus("Impossible de charger la photo de profil.", true);
+    console.error("Erreur chargement profil:", error);
+    setProfileStatus(`Impossible de charger la photo de profil: ${firebaseErrorText(error)}`, true);
   }
 }
 
@@ -189,7 +194,8 @@ uploadProfilePicture.addEventListener("click", async () => {
     profilePictureInput.value = "";
     setProfileStatus("Photo de profil mise a jour.");
   } catch (error) {
-    setProfileStatus("Impossible d'envoyer la photo. Verifie Storage et ses regles.", true);
+    console.error("Erreur upload avatar:", error);
+    setProfileStatus(`Impossible d'envoyer la photo: ${firebaseErrorText(error)}`, true);
   } finally {
     uploadProfilePicture.disabled = false;
   }
@@ -222,7 +228,8 @@ messageForm.addEventListener("submit", async (event) => {
     messageForm.reset();
     setForumStatus("Message envoye.");
   } catch (error) {
-    setForumStatus("Le message n'a pas pu etre envoye. Verifie Firestore.", true);
+    console.error("Erreur envoi message:", error);
+    setForumStatus(`Le message n'a pas pu etre envoye: ${firebaseErrorText(error)}`, true);
   }
 });
 
@@ -274,13 +281,15 @@ onSnapshot(collection(db, "users"), (snapshot) => {
   if (latestMessagesSnapshot) {
     renderMessages(latestMessagesSnapshot);
   }
-}, () => {
-  setProfileStatus("Impossible de lire les profils. Verifie les regles Firestore users.", true);
+}, (error) => {
+  console.error("Erreur lecture profils:", error);
+  setProfileStatus(`Impossible de lire les profils: ${firebaseErrorText(error)}`, true);
 });
 
 onSnapshot(messagesQuery, (snapshot) => {
   latestMessagesSnapshot = snapshot;
   renderMessages(snapshot);
-}, () => {
-  messagesList.innerHTML = '<div class="empty-courses">Impossible de charger les messages. Verifie Firestore et ses regles.</div>';
+}, (error) => {
+  console.error("Erreur lecture messages:", error);
+  messagesList.innerHTML = `<div class="empty-courses">Impossible de charger les messages: ${escapeHtml(firebaseErrorText(error))}</div>`;
 });
