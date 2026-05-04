@@ -574,11 +574,6 @@
       font-weight: 950;
     }
 
-    .forum-message.has-avatar::before {
-      background-image: var(--avatar-url);
-      color: transparent;
-    }
-
     .forum-message-body {
       min-width: 0;
       padding: 12px 14px;
@@ -592,9 +587,12 @@
       align-items: baseline;
       gap: 10px;
       margin-bottom: 6px;
-      color: #b9ecff;
       font-size: 0.9rem;
       font-weight: 900;
+    }
+
+    .username {
+      color: #b9ecff;
     }
 
     .forum-message-date {
@@ -1201,37 +1199,23 @@
       color: var(--text);
     }
 
-    .profile-row {
-      display: grid;
-      grid-template-columns: 76px minmax(0, 1fr);
-      gap: 14px;
-      align-items: center;
-      margin-bottom: 16px;
-    }
-
-    .profile-avatar {
-      width: 76px;
-      height: 76px;
-      display: grid;
-      place-items: center;
-      border: 2px solid rgba(56, 189, 248, 0.36);
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--brand), var(--brand-2));
-      color: #04111d;
-      object-fit: cover;
-      font-size: 1.6rem;
-      font-weight: 950;
-    }
-
     .profile-actions {
       display: grid;
       gap: 10px;
     }
 
-    .profile-actions input[type="file"] {
-      min-height: auto;
+    .profile-color-row {
+      display: grid;
+      grid-template-columns: 1fr 54px;
+      gap: 10px;
+      align-items: end;
+    }
+
+    .profile-color-row input[type="color"] {
+      min-height: 46px;
       margin-bottom: 0;
-      padding: 10px;
+      padding: 4px;
+      cursor: pointer;
     }
 
     .profile-status {
@@ -1971,20 +1955,18 @@
       </form>
 
       <div class="auth-user-box" id="authUserBox">
-        <div class="profile-row">
-          <img class="profile-avatar" id="profileAvatar" alt="Photo de profil" hidden>
-          <div class="profile-avatar" id="profileAvatarFallback">?</div>
-          <div>
-            <strong id="authUserName">Compte connecte</strong>
-            <span id="authUserEmail"></span>
-          </div>
-        </div>
+        <strong id="authUserName">Compte connecte</strong>
+        <span id="authUserEmail"></span>
 
         <div class="profile-actions">
-          <label for="profilePictureInput">Photo de profil</label>
-          <input id="profilePictureInput" type="file" accept="image/*">
-          <button class="btn secondary" type="button" id="uploadProfilePicture">Changer la photo</button>
-          <p class="profile-status" id="profilePictureStatus">Choisis une image pour afficher un avatar rond.</p>
+          <div class="profile-color-row">
+            <div>
+              <label for="usernameColorPicker">Couleur du pseudo</label>
+              <p class="profile-status">Cette couleur apparaitra dans tes messages.</p>
+            </div>
+            <input id="usernameColorPicker" type="color" value="#b9ecff" aria-label="Couleur du pseudo">
+          </div>
+          <p class="profile-status" id="profileStatus">Couleur de pseudo prete.</p>
         </div>
 
         <button class="btn secondary" type="button" id="logoutAccount">Se deconnecter</button>

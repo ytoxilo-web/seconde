@@ -12,12 +12,6 @@ import {
   serverTimestamp,
   setDoc
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
-import {
-  getStorage,
-  getDownloadURL,
-  ref,
-  uploadBytes
-} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-storage.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDzyz3FXGXQMKnRNneXuvcWB_m5sLCFx6M",
@@ -32,22 +26,19 @@ const firebaseConfig = {
 const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-const storage = getStorage(app);
 
 const messageForm = document.querySelector("#messageForm");
 const messageInput = document.querySelector("#messageInput");
 const messagesList = document.querySelector("#messagesList");
 const forumStatus = document.querySelector("#forumStatus");
 const sendMessage = document.querySelector("#sendMessage");
-const profileAvatar = document.querySelector("#profileAvatar");
-const profileAvatarFallback = document.querySelector("#profileAvatarFallback");
-const profilePictureInput = document.querySelector("#profilePictureInput");
-const uploadProfilePicture = document.querySelector("#uploadProfilePicture");
-const profilePictureStatus = document.querySelector("#profilePictureStatus");
+const profileStatus = document.querySelector("#profileStatus");
+const usernameColorPicker = document.querySelector("#usernameColorPicker");
 
 let currentUser = null;
 let latestMessagesSnapshot = null;
 let userProfiles = {};
+const DEFAULT_USERNAME_COLOR = "#b9ecff";
 
 function setForumStatus(message, isError = false) {
   forumStatus.textContent = message;
@@ -55,8 +46,8 @@ function setForumStatus(message, isError = false) {
 }
 
 function setProfileStatus(message, isError = false) {
-  profilePictureStatus.textContent = message;
-  profilePictureStatus.classList.toggle("is-error", isError);
+  profileStatus.textContent = message;
+  profileStatus.classList.toggle("is-error", isError);
 }
 
 function firebaseErrorText(error) {
@@ -73,19 +64,18 @@ function getInitial(name) {
   return String(name || "U").trim().charAt(0).toUpperCase() || "U";
 }
 
-function showAvatar(url, fallbackText) {
-  profileAvatarFallback.textContent = getInitial(fallbackText);
+function isValidHexColor(color) {
+  return /^#[0-9a-fA-F]{6}$/.test(String(color || ""));
+}
 
-  if (url) {
-    profileAvatar.src = url;
-    profileAvatar.hidden = false;
-    profileAvatarFallback.hidden = true;
-    return;
-  }
+function getSafeUsernameColor(color) {
+  return isValidHexColor(color) ? color : DEFAULT_USERNAME_COLOR;
+}
 
-  profileAvatar.removeAttribute("src");
-  profileAvatar.hidden = true;
-  profileAvatarFallback.hidden = false;
+function setProfileUsernameColor(color) {
+  const safeColor = getSafeUsernameColor(color);
+  usernameColorPicker.value = safeColor;
+  document.querySelector("#authUserName").style.color = safeColor;
 }
 
 function formatDate(date) {
@@ -110,94 +100,63 @@ onAuthStateChanged(auth, (user) => {
   currentUser = user;
   sendMessage.disabled = !user;
   messageInput.disabled = !user;
-  uploadProfilePicture.disabled = !user;
-  profilePictureInput.disabled = !user;
+  usernameColorPicker.disabled = !user;
 
   if (user) {
     loadUserProfile(user);
     setForumStatus(`Connecte en tant que ${getPseudo(user)}.`);
   } else {
-    showAvatar("", "?");
-    profilePictureInput.value = "";
-    setProfileStatus("Connecte-toi pour ajouter une photo de profil.");
+    setProfileUsernameColor(DEFAULT_USERNAME_COLOR);
+    setProfileStatus("Connecte-toi pour changer la couleur du pseudo.");
     setForumStatus("Connecte-toi pour envoyer un message.");
   }
 });
 
 async function loadUserProfile(user) {
-  showAvatar(user.photoURL, getPseudo(user));
-
   try {
     const userRef = doc(db, "users", user.uid);
     const userSnapshot = await getDoc(userRef);
     const userData = userSnapshot.exists() ? userSnapshot.data() : {};
-    const photoURL = userData.photoURL || user.photoURL || "";
+    const usernameColor = getSafeUsernameColor(userData.usernameColor);
 
-    showAvatar(photoURL, userData.pseudo || getPseudo(user));
-    setProfileStatus(photoURL ? "Photo de profil chargee." : "Choisis une image pour afficher un avatar rond.");
+    setProfileUsernameColor(usernameColor);
+    setProfileStatus("Couleur de pseudo chargee.");
   } catch (error) {
     console.error("Erreur chargement profil:", error);
-    setProfileStatus(`Impossible de charger la photo de profil: ${firebaseErrorText(error)}`, true);
+    setProfileStatus(`Impossible de charger le profil: ${firebaseErrorText(error)}`, true);
   }
 }
 
-profilePictureInput.addEventListener("change", () => {
-  const file = profilePictureInput.files[0];
-
-  if (!file) return;
-
-  if (!file.type.startsWith("image/")) {
-    profilePictureInput.value = "";
-    setProfileStatus("Le fichier choisi doit etre une image.", true);
-    return;
-  }
-
-  showAvatar(URL.createObjectURL(file), currentUser ? getPseudo(currentUser) : "?");
-  setProfileStatus("Apercu pret. Clique sur Changer la photo pour l'envoyer.");
-});
-
-uploadProfilePicture.addEventListener("click", async () => {
+usernameColorPicker.addEventListener("change", async () => {
   if (!currentUser) {
-    setProfileStatus("Tu dois etre connecte pour changer ta photo.", true);
+    setProfileStatus("Tu dois etre connecte pour changer la couleur du pseudo.", true);
+    setProfileUsernameColor(DEFAULT_USERNAME_COLOR);
     return;
   }
 
-  const file = profilePictureInput.files[0];
+  const usernameColor = usernameColorPicker.value;
 
-  if (!file) {
-    setProfileStatus("Choisis d'abord une image.", true);
-    return;
-  }
-
-  if (!file.type.startsWith("image/")) {
-    setProfileStatus("Le fichier choisi doit etre une image.", true);
+  if (!isValidHexColor(usernameColor)) {
+    setProfileStatus("La couleur doit etre au format hex: #RRGGBB.", true);
+    setProfileUsernameColor(DEFAULT_USERNAME_COLOR);
     return;
   }
 
   try {
-    uploadProfilePicture.disabled = true;
-    setProfileStatus("Upload de la photo...");
-
-    const avatarRef = ref(storage, `profilePictures/${currentUser.uid}/avatar`);
-    await uploadBytes(avatarRef, file, { contentType: file.type });
-    const downloadURL = await getDownloadURL(avatarRef);
-
+    setProfileUsernameColor(usernameColor);
     await setDoc(doc(db, "users", currentUser.uid), {
       userId: currentUser.uid,
       email: currentUser.email,
+      username: getPseudo(currentUser),
       pseudo: getPseudo(currentUser),
-      photoURL: downloadURL,
+      usernameColor,
       updatedAt: serverTimestamp()
     }, { merge: true });
 
-    showAvatar(downloadURL, getPseudo(currentUser));
-    profilePictureInput.value = "";
-    setProfileStatus("Photo de profil mise a jour.");
+    setProfileStatus("Couleur du pseudo mise a jour.");
   } catch (error) {
-    console.error("Erreur upload avatar:", error);
-    setProfileStatus(`Impossible d'envoyer la photo: ${firebaseErrorText(error)}`, true);
-  } finally {
-    uploadProfilePicture.disabled = false;
+    console.error("Erreur couleur pseudo:", error);
+    setProfileStatus(`Impossible de changer la couleur: ${firebaseErrorText(error)}`, true);
   }
 });
 
@@ -248,19 +207,15 @@ function renderMessages(snapshot) {
     const date = message.date?.toDate ? message.date.toDate() : null;
     const profile = userProfiles[message.userId] || {};
     const pseudo = profile.pseudo || message.pseudo || message.email || "Utilisateur";
-    const avatar = profile.photoURL || "";
+    const usernameColor = getSafeUsernameColor(profile.usernameColor);
     const article = document.createElement("article");
 
     article.className = "forum-message";
     article.dataset.initial = getInitial(pseudo);
-    if (avatar) {
-      article.classList.add("has-avatar");
-      article.style.setProperty("--avatar-url", `url("${avatar}")`);
-    }
     article.innerHTML = `
       <div class="forum-message-body">
         <div class="forum-message-head">
-          <span>${escapeHtml(pseudo)}</span>
+          <span class="username" style="color: ${usernameColor};">${escapeHtml(pseudo)}</span>
           <span class="forum-message-date">${escapeHtml(formatDate(date))}</span>
         </div>
         <p>${escapeHtml(message.texte)}</p>
@@ -277,6 +232,10 @@ onSnapshot(collection(db, "users"), (snapshot) => {
   snapshot.forEach((doc) => {
     userProfiles[doc.id] = doc.data();
   });
+
+  if (currentUser && userProfiles[currentUser.uid]) {
+    setProfileUsernameColor(userProfiles[currentUser.uid].usernameColor);
+  }
 
   if (latestMessagesSnapshot) {
     renderMessages(latestMessagesSnapshot);
