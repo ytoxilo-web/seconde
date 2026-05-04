@@ -1,0 +1,3288 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Plateforme de cours claire, moderne et organisee par matieres.">
+  <title>FlowLearn - Cours et matieres</title>
+  <style>
+    :root {
+      --bg: #080b12;
+      --bg-soft: #0d1320;
+      --panel: #111827;
+      --panel-2: #151f31;
+      --text: #f7fafc;
+      --muted: #a8b3c7;
+      --line: rgba(255, 255, 255, 0.1);
+      --brand: #38bdf8;
+      --brand-2: #22c55e;
+      --warning: #f59e0b;
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+      --radius: 8px;
+      --max: 1160px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 20% 0%, rgba(56, 189, 248, 0.16), transparent 34rem),
+        radial-gradient(circle at 90% 15%, rgba(34, 197, 94, 0.12), transparent 30rem),
+        var(--bg);
+      line-height: 1.6;
+    }
+
+    body.gate-locked {
+      overflow: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .container {
+      width: min(100% - 32px, var(--max));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid var(--line);
+      background: rgba(8, 11, 18, 0.82);
+      backdrop-filter: blur(16px);
+    }
+
+    .nav {
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, var(--brand), var(--brand-2));
+      color: #07111f;
+      font-weight: 900;
+      box-shadow: 0 12px 32px rgba(56, 189, 248, 0.18);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .nav-links a {
+      padding: 10px 12px;
+      border-radius: var(--radius);
+      transition: color 180ms ease, background 180ms ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.07);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .visitor-greeting {
+      color: var(--muted);
+      font-weight: 800;
+      font-size: 0.92rem;
+      white-space: nowrap;
+    }
+
+    .account-status {
+      color: #b9ecff;
+      font-weight: 800;
+      font-size: 0.9rem;
+      white-space: nowrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 44px;
+      padding: 0 18px;
+      border: 1px solid transparent;
+      border-radius: var(--radius);
+      background: var(--brand);
+      color: #04111d;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      background: #67d8ff;
+    }
+
+    .btn.secondary {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: var(--line);
+      color: var(--text);
+    }
+
+    .btn.secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .btn.admin {
+      background: rgba(245, 158, 11, 0.12);
+      border-color: rgba(245, 158, 11, 0.34);
+      color: #ffe0a3;
+    }
+
+    .btn.admin:hover {
+      background: rgba(245, 158, 11, 0.2);
+    }
+
+    .announcement {
+      border-bottom: 1px solid rgba(245, 158, 11, 0.26);
+      background: linear-gradient(90deg, rgba(245, 158, 11, 0.18), rgba(56, 189, 248, 0.1));
+    }
+
+    .announcement.is-hidden {
+      display: none;
+    }
+
+    .announcement .container {
+      min-height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: #ffe8bd;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .hero {
+      min-height: calc(100vh - 123px);
+      display: grid;
+      align-items: center;
+      padding: 72px 0 56px;
+    }
+
+    .hero-grid {
+      display: flex;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 11px;
+      border: 1px solid rgba(56, 189, 248, 0.26);
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.1);
+      color: #b9ecff;
+      font-size: 0.9rem;
+      font-weight: 800;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      max-width: 760px;
+      margin: 0 auto 18px;
+      font-size: clamp(2.45rem, 7vw, 5.7rem);
+      line-height: 0.95;
+      letter-spacing: 0;
+    }
+
+    .hero p {
+      max-width: 650px;
+      margin-left: auto;
+      margin-right: auto;
+      color: var(--muted);
+      font-size: 1.13rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    section {
+      padding: 76px 0;
+    }
+
+    .section-head {
+      max-width: 760px;
+      margin-bottom: 28px;
+    }
+
+    .section-head h2 {
+      margin-bottom: 10px;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .section-head p {
+      color: var(--muted);
+      font-size: 1.04rem;
+    }
+
+    .subjects {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .subject-card,
+    .news-card,
+    .faq-item {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.035));
+    }
+
+    .subject-card {
+      min-height: 214px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: var(--text);
+      cursor: pointer;
+      font: inherit;
+      text-align: left;
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+    }
+
+    .subject-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(56, 189, 248, 0.45);
+      background: linear-gradient(180deg, rgba(56, 189, 248, 0.12), rgba(255, 255, 255, 0.035));
+    }
+
+    .subject-icon {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius);
+      background: rgba(56, 189, 248, 0.12);
+      color: #8fe4ff;
+      font-weight: 900;
+    }
+
+    .subject-card h3 {
+      margin: 18px 0 8px;
+      font-size: 1.15rem;
+    }
+
+    .subject-card p {
+      margin-bottom: 20px;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .tag {
+      width: max-content;
+      max-width: 100%;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(34, 197, 94, 0.12);
+      color: #adf7c6;
+      font-size: 0.82rem;
+      font-weight: 800;
+    }
+
+    .news-band {
+      background: rgba(255, 255, 255, 0.028);
+      border-block: 1px solid var(--line);
+    }
+
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .news-card {
+      overflow: hidden;
+      min-height: 260px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .news-photo {
+      aspect-ratio: 16 / 9;
+      width: 100%;
+      object-fit: contain;
+      background: rgba(0, 0, 0, 0.24);
+    }
+
+    .news-body {
+      padding: 20px;
+    }
+
+    .news-date {
+      display: inline-flex;
+      margin-bottom: 12px;
+      color: #b9ecff;
+      font-size: 0.86rem;
+      font-weight: 800;
+    }
+
+    .news-card h3 {
+      margin-bottom: 10px;
+      font-size: 1.15rem;
+    }
+
+    .news-card p {
+      color: var(--muted);
+      margin-bottom: 0;
+    }
+
+    .courses-preview {
+      display: grid;
+      grid-template-columns: 0.85fr 1.15fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .course-search {
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      position: sticky;
+      top: 100px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    input,
+    select {
+      width: 100%;
+      min-height: 46px;
+      margin-bottom: 14px;
+      padding: 0 13px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #0a101b;
+      color: var(--text);
+      font: inherit;
+      outline: none;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: rgba(56, 189, 248, 0.75);
+    }
+
+    .course-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .empty-courses {
+      padding: 18px;
+      border: 1px dashed rgba(255, 255, 255, 0.2);
+      border-radius: var(--radius);
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .course-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: center;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel-2);
+    }
+
+    .course-row h3 {
+      margin-bottom: 4px;
+      font-size: 1.03rem;
+    }
+
+    .course-row p {
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .level {
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.11);
+      color: #b9ecff;
+      font-size: 0.82rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .discussion-panel {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #0c111c;
+      box-shadow: var(--shadow);
+    }
+
+    .discussion-top {
+      min-height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.035);
+    }
+
+    .discussion-channel {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .discussion-icon {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      border-radius: var(--radius);
+      background: rgba(56, 189, 248, 0.14);
+      color: #b9ecff;
+      font-size: 1.35rem;
+      font-weight: 900;
+    }
+
+    .discussion-channel h3 {
+      margin: 0;
+      font-size: 1.05rem;
+    }
+
+    .discussion-channel p {
+      margin: 2px 0 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .discussion-live {
+      padding: 6px 10px;
+      border: 1px solid rgba(34, 197, 94, 0.28);
+      border-radius: 999px;
+      background: rgba(34, 197, 94, 0.1);
+      color: #adf7c6;
+      font-size: 0.78rem;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .forum-messages {
+      height: min(58vh, 560px);
+      min-height: 360px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding: 20px;
+      background:
+        linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+        #0a0f19;
+      background-size: 100% 48px;
+    }
+
+    .forum-message {
+      display: grid;
+      grid-template-columns: 42px minmax(0, 1fr);
+      gap: 12px;
+      max-width: 780px;
+    }
+
+    .forum-message::before {
+      content: attr(data-initial);
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--brand), var(--brand-2));
+      background-position: center;
+      background-size: cover;
+      color: #04111d;
+      font-weight: 950;
+    }
+
+    .forum-message.has-avatar::before {
+      background-image: var(--avatar-url);
+      color: transparent;
+    }
+
+    .forum-message-body {
+      min-width: 0;
+      padding: 12px 14px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius);
+      background: var(--panel-2);
+    }
+
+    .forum-message-head {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 6px;
+      color: #b9ecff;
+      font-size: 0.9rem;
+      font-weight: 900;
+    }
+
+    .forum-message-date {
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .forum-message p {
+      margin: 0;
+      color: var(--text);
+      line-height: 1.55;
+      overflow-wrap: anywhere;
+    }
+
+    .forum-form {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: end;
+      padding: 16px;
+      border-top: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.035);
+    }
+
+    .forum-input-wrap label {
+      margin-bottom: 8px;
+    }
+
+    .forum-form textarea {
+      min-height: 52px;
+      max-height: 160px;
+      margin-bottom: 0;
+      resize: vertical;
+      background: #0a101b;
+    }
+
+    .forum-form .btn {
+      min-height: 52px;
+      margin-bottom: 0;
+    }
+
+    .forum-status {
+      grid-column: 1 / -1;
+      margin: -2px 0 0;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .forum-status.is-error {
+      color: #fecaca;
+    }
+
+    .faq {
+      display: grid;
+      gap: 10px;
+      max-width: 860px;
+    }
+
+    .faq-item {
+      padding: 0 18px;
+    }
+
+    .faq-item summary {
+      cursor: pointer;
+      padding: 18px 0;
+      font-weight: 800;
+    }
+
+    .faq-item p {
+      margin-bottom: 18px;
+      color: var(--muted);
+    }
+
+    .cta {
+      padding: 48px;
+      border: 1px solid rgba(56, 189, 248, 0.24);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(135deg, rgba(56, 189, 248, 0.18), rgba(34, 197, 94, 0.1)),
+        var(--panel);
+    }
+
+    .cta h2 {
+      max-width: 760px;
+      margin-bottom: 12px;
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      line-height: 1.05;
+    }
+
+    .cta p {
+      max-width: 680px;
+      color: var(--muted);
+      font-size: 1.04rem;
+    }
+
+    footer {
+      padding: 36px 0;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+    }
+
+    .footer-grid {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a:hover {
+      color: var(--text);
+    }
+
+    .course-browser {
+      position: fixed;
+      inset: 0;
+      z-index: 24;
+      display: none;
+      overflow: auto;
+      padding: 0;
+      background:
+        radial-gradient(circle at 16% 0%, rgba(56, 189, 248, 0.15), transparent 30rem),
+        radial-gradient(circle at 86% 8%, rgba(34, 197, 94, 0.12), transparent 28rem),
+        var(--bg);
+    }
+
+    .course-browser.is-open {
+      display: block;
+    }
+
+    .course-view {
+      width: min(100% - 32px, var(--max));
+      margin: 0 auto;
+      padding: 88px 0 64px;
+    }
+
+    .back-btn {
+      position: fixed;
+      top: 18px;
+      left: 18px;
+      z-index: 26;
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(8, 11, 18, 0.82);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 1.35rem;
+      backdrop-filter: blur(14px);
+    }
+
+    .browser-head {
+      max-width: 820px;
+      margin: 0 auto 28px;
+      text-align: center;
+    }
+
+    .browser-head h2 {
+      margin-bottom: 10px;
+      font-size: clamp(2.2rem, 5vw, 4.2rem);
+      line-height: 1;
+    }
+
+    .browser-head p {
+      color: var(--muted);
+      font-size: 1.04rem;
+    }
+
+    .browser-subjects {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .browser-subject {
+      min-height: 164px;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.065), rgba(255, 255, 255, 0.035));
+      color: var(--text);
+      cursor: pointer;
+      text-align: left;
+      font: inherit;
+      transition: transform 180ms ease, border-color 180ms ease;
+    }
+
+    .browser-subject:hover {
+      transform: translateY(-2px);
+      border-color: rgba(56, 189, 248, 0.45);
+    }
+
+    .browser-subject strong {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 1.18rem;
+    }
+
+    .browser-subject span {
+      color: var(--muted);
+    }
+
+    .syllabus {
+      display: grid;
+      gap: 12px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .syllabus-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: center;
+      width: 100%;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel-2);
+      color: var(--text);
+      cursor: pointer;
+      text-align: left;
+      font: inherit;
+    }
+
+    .syllabus-item p {
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .course-reader {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 32px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.055);
+    }
+
+    .course-reader h2 {
+      margin-bottom: 10px;
+      font-size: clamp(2rem, 4vw, 3.3rem);
+      line-height: 1.05;
+    }
+
+    .course-reader .content {
+      margin-top: 24px;
+      color: #dbe7f7;
+      white-space: pre-wrap;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(0, 0, 0, 0.62);
+    }
+
+    .access-gate {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background:
+        radial-gradient(circle at 20% 0%, rgba(56, 189, 248, 0.18), transparent 34rem),
+        radial-gradient(circle at 90% 15%, rgba(34, 197, 94, 0.12), transparent 30rem),
+        var(--bg);
+    }
+
+    .access-gate.is-open {
+      display: flex;
+    }
+
+    .access-card {
+      width: min(100%, 560px);
+      padding: 28px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #0b111d;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .access-card h2 {
+      margin-bottom: 10px;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      line-height: 1.05;
+    }
+
+    .access-card p {
+      color: var(--muted);
+    }
+
+    .access-card form {
+      margin-top: 22px;
+      text-align: left;
+    }
+
+    .modal.is-open {
+      display: flex;
+    }
+
+    .modal-card {
+      width: min(100%, 560px);
+      max-height: calc(100vh - 48px);
+      overflow: auto;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #0b111d;
+      box-shadow: var(--shadow);
+    }
+
+    .modal-card.admin-wide {
+      width: min(100%, 1100px);
+    }
+
+    .modal-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 20px;
+    }
+
+    .modal-head h2 {
+      margin-bottom: 4px;
+      font-size: 1.5rem;
+    }
+
+    .modal-head p {
+      margin-bottom: 0;
+      color: var(--muted);
+    }
+
+    .icon-btn {
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 1.2rem;
+    }
+
+    .admin-panel {
+      display: none;
+    }
+
+    .admin-panel.is-visible {
+      display: block;
+    }
+
+    .admin-tools {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .admin-subpanel,
+    .class-panel {
+      display: none;
+    }
+
+    .admin-subpanel.is-visible,
+    .class-panel.is-visible {
+      display: block;
+    }
+
+    .class-mode {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 44px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .class-mode input {
+      width: auto;
+      min-height: auto;
+      margin: 0;
+    }
+
+    .admin-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 340px;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .admin-box {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .admin-list {
+      display: grid;
+      gap: 10px;
+      max-height: 560px;
+      overflow: auto;
+    }
+
+    .admin-course {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.045);
+    }
+
+    .admin-course h3 {
+      margin-bottom: 4px;
+      font-size: 1rem;
+    }
+
+    .admin-course p {
+      margin-bottom: 12px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      width: max-content;
+      max-width: 100%;
+      margin-bottom: 10px;
+      padding: 5px 9px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 900;
+    }
+
+    .status-badge.allowed {
+      background: rgba(34, 197, 94, 0.14);
+      color: #adf7c6;
+    }
+
+    .status-badge.banned {
+      background: rgba(239, 68, 68, 0.16);
+      color: #fecaca;
+    }
+
+    .status-badge.whitelist {
+      background: rgba(245, 158, 11, 0.16);
+      color: #ffe0a3;
+    }
+
+    .admin-feedback {
+      display: none;
+      margin: 0 0 14px;
+      padding: 10px 12px;
+      border: 1px solid rgba(56, 189, 248, 0.32);
+      border-radius: var(--radius);
+      background: rgba(56, 189, 248, 0.1);
+      color: #b9ecff;
+      font-weight: 800;
+    }
+
+    .admin-feedback.is-visible {
+      display: block;
+    }
+
+    .admin-course-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .admin-section {
+      margin-top: 22px;
+      padding-top: 22px;
+      border-top: 1px solid var(--line);
+    }
+
+    .admin-section:first-child {
+      margin-top: 0;
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    .photo-preview {
+      display: none;
+      width: 100%;
+      max-height: 180px;
+      margin-bottom: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      object-fit: cover;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .photo-preview.is-visible {
+      display: block;
+    }
+
+    .btn.danger {
+      background: rgba(239, 68, 68, 0.13);
+      border-color: rgba(239, 68, 68, 0.42);
+      color: #fecaca;
+    }
+
+    .btn.danger:hover {
+      background: rgba(239, 68, 68, 0.22);
+    }
+
+    .admin-error {
+      display: none;
+      margin: 0 0 14px;
+      color: #fecaca;
+      font-weight: 700;
+    }
+
+    .admin-error.is-visible {
+      display: block;
+    }
+
+    .auth-tabs {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-bottom: 18px;
+      padding: 4px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .auth-tab {
+      min-height: 40px;
+      border: 0;
+      border-radius: var(--radius);
+      background: transparent;
+      color: var(--muted);
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .auth-tab.is-active {
+      background: var(--brand);
+      color: #04111d;
+    }
+
+    .auth-panel {
+      display: none;
+    }
+
+    .auth-panel.is-visible {
+      display: block;
+    }
+
+    .auth-status {
+      display: none;
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .auth-status.is-visible {
+      display: block;
+    }
+
+    .auth-status.is-error {
+      color: #fecaca;
+    }
+
+    .auth-user-box {
+      display: none;
+      margin-top: 16px;
+      padding: 16px;
+      border: 1px solid rgba(56, 189, 248, 0.24);
+      border-radius: var(--radius);
+      background: rgba(56, 189, 248, 0.08);
+    }
+
+    .auth-user-box.is-visible {
+      display: block;
+    }
+
+    .auth-user-box strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--text);
+    }
+
+    .profile-row {
+      display: grid;
+      grid-template-columns: 76px minmax(0, 1fr);
+      gap: 14px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .profile-avatar {
+      width: 76px;
+      height: 76px;
+      display: grid;
+      place-items: center;
+      border: 2px solid rgba(56, 189, 248, 0.36);
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--brand), var(--brand-2));
+      color: #04111d;
+      object-fit: cover;
+      font-size: 1.6rem;
+      font-weight: 950;
+    }
+
+    .profile-actions {
+      display: grid;
+      gap: 10px;
+    }
+
+    .profile-actions input[type="file"] {
+      min-height: auto;
+      margin-bottom: 0;
+      padding: 10px;
+    }
+
+    .profile-status {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-weight: 800;
+    }
+
+    .profile-status.is-error {
+      color: #fecaca;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .form-grid .full {
+      grid-column: 1 / -1;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 108px;
+      margin-bottom: 14px;
+      padding: 12px 13px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #0a101b;
+      color: var(--text);
+      font: inherit;
+      resize: vertical;
+      outline: none;
+    }
+
+    textarea:focus {
+      border-color: rgba(56, 189, 248, 0.75);
+    }
+
+    @media (max-width: 920px) {
+      .hero {
+        min-height: auto;
+      }
+
+      .courses-preview {
+        grid-template-columns: 1fr;
+      }
+
+      .subjects,
+      .browser-subjects {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .news-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .admin-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .course-search {
+        position: static;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .nav {
+        min-height: auto;
+        padding: 14px 0;
+        align-items: flex-start;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .announcement .container {
+        padding: 10px 0;
+      }
+
+      .hero {
+        padding-top: 48px;
+      }
+
+      .subjects,
+      .browser-subjects,
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .course-row {
+        grid-template-columns: 1fr;
+      }
+
+      .syllabus-item {
+        grid-template-columns: 1fr;
+      }
+
+      .discussion-top {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .forum-messages {
+        height: 460px;
+        padding: 14px;
+      }
+
+      .forum-message {
+        grid-template-columns: 36px minmax(0, 1fr);
+      }
+
+      .forum-message::before {
+        width: 36px;
+        height: 36px;
+      }
+
+      .forum-form {
+        grid-template-columns: 1fr;
+      }
+
+      .cta {
+        padding: 28px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <a class="brand" href="#accueil" aria-label="Accueil FlowLearn">
+        <span class="brand-mark">FL</span>
+        <span data-site-name>FlowLearn</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Navigation principale">
+        <a href="#cours" data-open-courses>Cours</a>
+        <a href="#actualites">Actualites</a>
+        <a href="#forum">Discussion</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+
+      <div class="nav-actions">
+        <span class="visitor-greeting" id="visitorGreeting"></span>
+        <span class="account-status" id="accountStatus"></span>
+        <button class="btn secondary" type="button" id="openCourseBrowser">Cours</button>
+        <button class="btn secondary" type="button" id="openAuth">Compte</button>
+        <button class="btn admin" type="button" id="openAdmin">Admin</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="announcement" id="announcementBar">
+    <div class="container">
+      <span id="announcementTitle">Ouverture prochaine</span>
+      <span id="announcementText">Les premiers cours arrivent bientot par matiere.</span>
+    </div>
+  </div>
+
+  <main id="accueil">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <span class="kicker" id="heroKicker">Plateforme de revision moderne</span>
+          <h1 id="heroTitle">Des cours clairs, classes par matiere.</h1>
+          <p id="heroSubtitle">
+            Une base propre pour rassembler des lecons, fiches de revision, exercices et ressources.
+            Le site est pret a evoluer quand tu voudras ajouter les vrais contenus.
+          </p>
+          <div class="hero-actions">
+            <a class="btn" href="#matieres">Explorer les matieres</a>
+            <a class="btn secondary" href="#actualites">Voir les actualites</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="matieres">
+      <div class="container">
+        <div class="section-head">
+          <h2>Matieres</h2>
+          <p>Des categories simples pour retrouver rapidement les cours. Les titres et descriptions sont modifiables plus tard.</p>
+        </div>
+
+        <div class="subjects">
+          <button class="subject-card" type="button" data-subject-card="français">
+            <div>
+              <div class="subject-icon">FR</div>
+              <h3>français</h3>
+              <p>Lecture, grammaire, redaction, argumentation et analyse de texte.</p>
+            </div>
+            <span class="tag">Voir les cours</span>
+          </button>
+
+          <button class="subject-card" type="button" data-subject-card="Math">
+            <div>
+              <div class="subject-icon">M</div>
+              <h3>Math</h3>
+              <p>Calcul, algebre, geometrie, fonctions, probabilites et methodes.</p>
+            </div>
+            <span class="tag">Voir les cours</span>
+          </button>
+
+          <button class="subject-card" type="button" data-subject-card="Histoire">
+            <div>
+              <div class="subject-icon">H</div>
+              <h3>Histoire</h3>
+              <p>Reperes, dates, evenements, chronologies et methodologie.</p>
+            </div>
+            <span class="tag">Voir les cours</span>
+          </button>
+
+          <button class="subject-card" type="button" data-subject-card="Géographie">
+            <div>
+              <div class="subject-icon">G</div>
+              <h3>Géographie</h3>
+              <p>Cartes, territoires, paysages, croquis et etudes de cas.</p>
+            </div>
+            <span class="tag">Voir les cours</span>
+          </button>
+
+          <button class="subject-card" type="button" data-subject-card="EMC">
+            <div>
+              <div class="subject-icon">E</div>
+              <h3>EMC</h3>
+              <p>Citoyennete, institutions, droits, devoirs et debat argumente.</p>
+            </div>
+            <span class="tag">Voir les cours</span>
+          </button>
+
+          <button class="subject-card" type="button" data-subject-card="Physique chimie">
+            <div>
+              <div class="subject-icon">PC</div>
+              <h3>Physique chimie</h3>
+              <p>Matiere, energie, mouvements, atomes et experiences.</p>
+            </div>
+            <span class="tag">Voir les cours</span>
+          </button>
+
+          <button class="subject-card" type="button" data-subject-card="SVT">
+            <div>
+              <div class="subject-icon">SV</div>
+              <h3>SVT</h3>
+              <p>Vivant, corps humain, Terre, environnement et schemas.</p>
+            </div>
+            <span class="tag">Voir les cours</span>
+          </button>
+
+          <button class="subject-card" type="button" data-subject-card="anglais">
+            <div>
+              <div class="subject-icon">EN</div>
+              <h3>anglais</h3>
+              <p>Vocabulaire, grammaire, comprehension et expression.</p>
+            </div>
+            <span class="tag">Voir les cours</span>
+          </button>
+
+          <button class="subject-card" type="button" data-subject-card="espagnol">
+            <div>
+              <div class="subject-icon">ES</div>
+              <h3>espagnol</h3>
+              <p>Conjugaison, vocabulaire, comprehension et expression.</p>
+            </div>
+            <span class="tag">Voir les cours</span>
+          </button>
+
+          <button class="subject-card" type="button" data-subject-card="SES">
+            <div>
+              <div class="subject-icon">SE</div>
+              <h3>SES</h3>
+              <p>Economie, sociologie, notions, donnees et raisonnement.</p>
+            </div>
+            <span class="tag">Voir les cours</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section id="actualites" class="news-band">
+      <div class="container">
+        <div class="section-head">
+          <h2>Actualites</h2>
+          <p>Les evenements et photos ajoutes depuis le panel admin apparaitront ici.</p>
+        </div>
+
+        <div class="news-grid" id="newsList"></div>
+      </div>
+    </section>
+
+    <section id="cours">
+      <div class="container courses-preview">
+        <div class="course-search">
+          <div class="section-head" style="margin-bottom: 18px;">
+            <h2>Apercu des cours</h2>
+            <p>Un futur espace pour filtrer par matiere, niveau ou chapitre.</p>
+          </div>
+
+          <form id="filterForm">
+            <label for="search">Recherche</label>
+            <input id="search" type="search" placeholder="Ex: fonctions, redaction, atomes">
+
+            <label for="subject">Matiere</label>
+            <select id="subject">
+              <option>Toutes les matieres</option>
+              <option>français</option>
+              <option>Math</option>
+              <option>Histoire</option>
+              <option>Géographie</option>
+              <option>EMC</option>
+              <option>Physique chimie</option>
+              <option>SVT</option>
+              <option>anglais</option>
+              <option>espagnol</option>
+              <option>SES</option>
+            </select>
+
+            <button class="btn" type="button">Filtrer</button>
+          </form>
+        </div>
+
+        <div class="course-list" id="courseList">
+          <article class="course-row">
+            <div>
+              <h3>Comprendre les fonctions</h3>
+              <p>Definitions, lectures graphiques et premiers exercices guides.</p>
+            </div>
+            <span class="level">Math</span>
+          </article>
+
+          <article class="course-row">
+            <div>
+              <h3>Construire une argumentation</h3>
+              <p>Structure, exemples, connecteurs logiques et conclusion efficace.</p>
+            </div>
+            <span class="level">français</span>
+          </article>
+
+          <article class="course-row">
+            <div>
+              <h3>Construire une frise chronologique</h3>
+              <p>Dates, periodes, reperes et lecture des evenements dans le temps.</p>
+            </div>
+            <span class="level">Histoire</span>
+          </article>
+
+          <article class="course-row">
+            <div>
+              <h3>Les bases de la matiere</h3>
+              <p>Atomes, molecules, changements d'etat et vocabulaire scientifique.</p>
+            </div>
+            <span class="level">Physique chimie</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="forum">
+      <div class="container">
+        <div class="section-head">
+          <h2>Discussion</h2>
+          <p>Un espace pour discuter en direct avec les comptes connectes.</p>
+        </div>
+
+        <div class="discussion-panel">
+          <div class="discussion-top">
+            <div class="discussion-channel">
+              <div class="discussion-icon">#</div>
+              <div>
+                <h3>discussion</h3>
+                <p>Messages synchronises avec Firebase Firestore.</p>
+              </div>
+            </div>
+            <span class="discussion-live">Temps reel</span>
+          </div>
+
+          <div class="forum-messages" id="messagesList">
+            <div class="empty-courses">Chargement des messages...</div>
+          </div>
+
+          <form class="forum-form" id="messageForm">
+            <div class="forum-input-wrap">
+              <label for="messageInput">Message</label>
+              <textarea id="messageInput" placeholder="Ecris ton message dans discussion..." required></textarea>
+            </div>
+            <button class="btn" type="submit" id="sendMessage">Envoyer</button>
+            <p class="forum-status" id="forumStatus">Connecte-toi pour envoyer un message.</p>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq">
+      <div class="container">
+        <div class="section-head">
+          <h2>Questions frequentes</h2>
+          <p>Une section pratique pour expliquer le fonctionnement quand la plateforme aura plus de contenu.</p>
+        </div>
+
+        <div class="faq">
+          <details class="faq-item" open>
+            <summary>Quand les cours seront-ils ajoutes ?</summary>
+            <p>Les cartes sont deja prevues pour accueillir les premiers cours. Il suffira de remplacer les exemples par les vrais contenus.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>Peut-on ajouter d'autres matieres ?</summary>
+            <p>La liste actuelle est fixee sur les matieres principales du site. Les cours peuvent etre ajoutes dans chacune depuis le panel admin.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>Le site fonctionne-t-il sur mobile ?</summary>
+            <p>Oui. Les sections passent automatiquement en une colonne sur les petits ecrans pour garder une lecture confortable.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="container footer-grid">
+      <div>
+        <strong style="color: var(--text);" data-site-name>FlowLearn</strong>
+        <div id="footerText">Plateforme de cours en preparation.</div>
+      </div>
+      <div class="footer-links" aria-label="Liens de pied de page">
+        <a href="#accueil">Accueil</a>
+        <a href="#matieres">Matieres</a>
+        <a href="#actualites">Actualites</a>
+        <a href="#cours">Cours</a>
+        <a href="#forum">Discussion</a>
+        <a href="#faq">FAQ</a>
+      </div>
+    </div>
+  </footer>
+
+  <section class="course-browser" id="courseBrowser" aria-hidden="true">
+    <button class="back-btn" type="button" id="courseBack" aria-label="Retour">&larr;</button>
+    <div class="course-view">
+      <div id="browserSubjectsView">
+        <div class="browser-head">
+          <span class="kicker">Cours par matiere</span>
+          <h2>Choisis une matiere</h2>
+          <p>Selectionne une matiere pour afficher son sommaire, puis ouvre le cours que tu veux lire.</p>
+        </div>
+        <div class="browser-subjects" id="browserSubjects"></div>
+      </div>
+
+      <div id="browserSyllabusView" hidden>
+        <div class="browser-head">
+          <span class="kicker" id="selectedSubjectLabel">Sommaire</span>
+          <h2 id="syllabusTitle">Cours</h2>
+          <p>Choisis un chapitre pour afficher le cours en grand.</p>
+        </div>
+        <div class="syllabus" id="syllabusList"></div>
+      </div>
+
+      <article class="course-reader" id="courseReaderView" hidden>
+        <span class="level" id="readerMeta">Matiere</span>
+        <h2 id="readerTitle">Titre du cours</h2>
+        <p id="readerDescription"></p>
+        <div class="content" id="readerContent"></div>
+      </article>
+    </div>
+  </section>
+
+  <div class="modal" id="adminModal" aria-hidden="true">
+    <div class="modal-card" id="adminCard" role="dialog" aria-modal="true" aria-labelledby="adminTitle">
+      <div class="modal-head">
+        <div>
+          <h2 id="adminTitle">Panel admin</h2>
+          <p>Ajoute, modifie ou retire des cours manuellement.</p>
+        </div>
+        <button class="icon-btn" type="button" id="closeAdmin" aria-label="Fermer le panel">x</button>
+      </div>
+
+      <form id="loginForm">
+        <label for="adminCode">Code admin a 4 chiffres</label>
+        <input id="adminCode" type="password" inputmode="numeric" maxlength="4" placeholder="0000" autocomplete="off">
+        <p class="admin-error" id="adminError">Code incorrect.</p>
+        <button class="btn" type="submit">Entrer</button>
+      </form>
+
+      <div class="admin-panel" id="adminPanel">
+        <div class="admin-section">
+          <div class="admin-tools">
+            <button class="btn" type="button" id="showAdminPanel">Admin</button>
+            <button class="btn secondary" type="button" id="toggleClassPanel">Classe</button>
+            <label class="class-mode" for="whitelistMode">
+              <input id="whitelistMode" type="checkbox">
+              Mode whitelist
+            </label>
+          </div>
+
+          <div class="admin-box class-panel" id="classPanel">
+            <h3>Liste des personnes entrees</h3>
+            <p style="color: var(--muted); margin-bottom: 14px;">
+              Le mode whitelist bloque les noms qui ne sont pas marques avec la couronne.
+            </p>
+            <p class="admin-feedback" id="classFeedback"></p>
+            <div class="admin-list" id="classNameList"></div>
+          </div>
+        </div>
+
+        <div class="admin-section admin-subpanel is-visible" id="adminSettingsPanel">
+          <div class="admin-grid">
+            <div class="admin-box">
+              <h3>Parametres du site</h3>
+              <form id="settingsForm">
+                <div class="form-grid">
+                  <div>
+                    <label for="settingSiteName">Nom du site</label>
+                    <input id="settingSiteName" type="text" required>
+                  </div>
+
+                  <div>
+                    <label for="settingBannerVisible">Banniere du haut</label>
+                    <select id="settingBannerVisible">
+                      <option value="true">Afficher</option>
+                      <option value="false">Masquer</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label for="settingBannerTitle">Titre de la banniere</label>
+                    <input id="settingBannerTitle" type="text">
+                  </div>
+
+                  <div>
+                    <label for="settingBannerText">Texte de la banniere</label>
+                    <input id="settingBannerText" type="text">
+                  </div>
+
+                  <div>
+                    <label for="settingBannerColor">Couleur de la banniere</label>
+                    <input id="settingBannerColor" type="color">
+                  </div>
+
+                  <div>
+                    <label for="settingBannerTextColor">Couleur du texte</label>
+                    <input id="settingBannerTextColor" type="color">
+                  </div>
+
+                  <div class="full">
+                    <label for="settingHeroKicker">Petit texte d'accueil</label>
+                    <input id="settingHeroKicker" type="text">
+                  </div>
+
+                  <div class="full">
+                    <label for="settingHeroTitle">Grand titre d'accueil</label>
+                    <input id="settingHeroTitle" type="text">
+                  </div>
+
+                  <div class="full">
+                    <label for="settingHeroSubtitle">Description d'accueil</label>
+                    <textarea id="settingHeroSubtitle"></textarea>
+                  </div>
+
+                  <div class="full">
+                    <label for="settingFooterText">Texte du pied de page</label>
+                    <input id="settingFooterText" type="text">
+                  </div>
+                </div>
+
+                <button class="btn" type="submit">Enregistrer les parametres</button>
+                <button class="btn secondary" type="button" id="resetSettings">Reinitialiser les parametres</button>
+              </form>
+            </div>
+
+            <aside class="admin-box">
+              <h3>Ce que les admins peuvent gerer</h3>
+              <p style="color: var(--muted); margin-bottom: 14px;">
+                Les textes principaux, la banniere, les cours, les actualites et les photos sont sauvegardes dans le navigateur.
+              </p>
+              <p style="color: var(--muted); margin-bottom: 0;">
+                Pour une vraie mise en ligne partagee entre plusieurs admins, il faudra ensuite brancher une base de donnees.
+              </p>
+            </aside>
+          </div>
+        </div>
+
+        <div class="admin-section">
+          <div class="admin-tools">
+            <button class="btn" type="button" id="newCourse">Ajouter un cours</button>
+            <button class="btn secondary" type="button" id="resetCourses">Reinitialiser les exemples</button>
+          </div>
+
+        <div class="admin-grid">
+          <div class="admin-box">
+            <h3 id="formTitle">Ajouter un cours</h3>
+            <form id="courseForm">
+              <input id="editingIndex" type="hidden" value="">
+              <div class="form-grid">
+                <div class="full">
+                  <label for="courseTitle">Titre du cours</label>
+                  <input id="courseTitle" type="text" placeholder="Ex: Les equations" required>
+                </div>
+
+                <div>
+                  <label for="courseSubject">Matiere</label>
+                  <select id="courseSubject" required>
+                    <option>français</option>
+                    <option>Math</option>
+                    <option>Histoire</option>
+                    <option>Géographie</option>
+                    <option>EMC</option>
+                    <option>Physique chimie</option>
+                    <option>SVT</option>
+                    <option>anglais</option>
+                    <option>espagnol</option>
+                    <option>SES</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label for="courseLevel">Niveau</label>
+                  <input id="courseLevel" type="text" placeholder="Ex: 3e, 2nde, Debutant">
+                </div>
+
+                <div class="full">
+                  <label for="courseDescription">Description</label>
+                  <textarea id="courseDescription" placeholder="Resume rapide du contenu du cours" required></textarea>
+                </div>
+
+                <div class="full">
+                  <label for="courseContent">Contenu du cours</label>
+                  <textarea id="courseContent" placeholder="Ecris le cours complet ici. Il apparaitra en grand dans la page cours." required></textarea>
+                </div>
+              </div>
+
+              <button class="btn" type="submit" id="saveCourse">Ajouter le cours</button>
+              <button class="btn secondary" type="button" id="cancelEdit">Annuler la modification</button>
+            </form>
+          </div>
+
+          <aside class="admin-box">
+            <h3>Cours existants</h3>
+            <div class="admin-list" id="adminCourseList"></div>
+          </aside>
+        </div>
+        </div>
+
+        <div class="admin-section">
+          <div class="admin-tools">
+            <button class="btn" type="button" id="newNews">Ajouter une actualite</button>
+          </div>
+
+          <div class="admin-grid">
+            <div class="admin-box">
+              <h3 id="newsFormTitle">Ajouter une actualite</h3>
+              <form id="newsForm">
+                <input id="editingNewsIndex" type="hidden" value="">
+                <input id="newsPhotoData" type="hidden" value="">
+
+                <div class="form-grid">
+                  <div class="full">
+                    <label for="newsTitle">Titre de l'actualite</label>
+                    <input id="newsTitle" type="text" placeholder="Ex: Sortie scolaire" required>
+                  </div>
+
+                  <div>
+                    <label for="newsDate">Date</label>
+                    <input id="newsDate" type="date" required>
+                  </div>
+
+                  <div>
+                    <label for="newsPhoto">Photo</label>
+                    <input id="newsPhoto" type="file" accept="image/*">
+                  </div>
+
+                  <div class="full">
+                    <label for="newsPhotoUrl">Lien photo optionnel</label>
+                    <input id="newsPhotoUrl" type="url" placeholder="https://exemple.fr/photo.jpg">
+                  </div>
+
+                  <div class="full">
+                    <img class="photo-preview" id="newsPhotoPreview" alt="Apercu de la photo">
+                    <label for="newsDescription">Texte de l'actualite</label>
+                    <textarea id="newsDescription" placeholder="Decris l'evenement ou l'information a afficher." required></textarea>
+                  </div>
+                </div>
+
+                <button class="btn" type="submit" id="saveNews">Ajouter l'actualite</button>
+                <button class="btn secondary" type="button" id="cancelNewsEdit">Annuler la modification</button>
+              </form>
+            </div>
+
+            <aside class="admin-box">
+              <h3>Actualites existantes</h3>
+              <div class="admin-list" id="adminNewsList"></div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="authModal" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+      <div class="modal-head">
+        <div>
+          <h2 id="authTitle">Compte</h2>
+          <p>Connecte-toi ou cree ton compte avec Firebase.</p>
+        </div>
+        <button class="icon-btn" type="button" id="closeAuth" aria-label="Fermer le compte">x</button>
+      </div>
+
+      <div class="auth-tabs" role="tablist" aria-label="Connexion ou inscription">
+        <button class="auth-tab is-active" type="button" id="showLogin" aria-selected="true">Connexion</button>
+        <button class="auth-tab" type="button" id="showSignup" aria-selected="false">Inscription</button>
+      </div>
+
+      <form class="auth-panel is-visible" id="loginAccountForm">
+        <label for="loginEmail">Email</label>
+        <input id="loginEmail" type="email" autocomplete="email" required>
+
+        <label for="loginPassword">Mot de passe</label>
+        <input id="loginPassword" type="password" autocomplete="current-password" minlength="6" required>
+
+        <button class="btn" type="submit">Se connecter</button>
+      </form>
+
+      <form class="auth-panel" id="signupAccountForm">
+        <label for="signupName">Nom affiche</label>
+        <input id="signupName" type="text" autocomplete="name" placeholder="Ex: Prenom">
+
+        <label for="signupEmail">Email</label>
+        <input id="signupEmail" type="email" autocomplete="email" required>
+
+        <label for="signupPassword">Mot de passe</label>
+        <input id="signupPassword" type="password" autocomplete="new-password" minlength="6" required>
+
+        <button class="btn" type="submit">Creer le compte</button>
+      </form>
+
+      <div class="auth-user-box" id="authUserBox">
+        <div class="profile-row">
+          <img class="profile-avatar" id="profileAvatar" alt="Photo de profil" hidden>
+          <div class="profile-avatar" id="profileAvatarFallback">?</div>
+          <div>
+            <strong id="authUserName">Compte connecte</strong>
+            <span id="authUserEmail"></span>
+          </div>
+        </div>
+
+        <div class="profile-actions">
+          <label for="profilePictureInput">Photo de profil</label>
+          <input id="profilePictureInput" type="file" accept="image/*">
+          <button class="btn secondary" type="button" id="uploadProfilePicture">Changer la photo</button>
+          <p class="profile-status" id="profilePictureStatus">Choisis une image pour afficher un avatar rond.</p>
+        </div>
+
+        <button class="btn secondary" type="button" id="logoutAccount">Se deconnecter</button>
+      </div>
+
+      <p class="auth-status" id="authStatusMessage"></p>
+    </div>
+  </div>
+
+  <div class="access-gate" id="accessGate" aria-hidden="true">
+    <div class="access-card">
+      <span class="kicker">Acces classe</span>
+      <h2>Quel est ton nom ?</h2>
+      <p>Il n'y a pas de mauvaise reponse. C'est juste pour verifier qui rejoint le site.</p>
+
+      <form id="visitorForm">
+        <label for="visitorName">Ton nom</label>
+        <input id="visitorName" type="text" placeholder="Ex: Prenom Nom" autocomplete="name" required>
+        <p class="admin-error" id="visitorError"></p>
+        <button class="btn" type="submit">Entrer sur le site</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const ADMIN_CODE = "9256";
+    const STORAGE_KEY = "flowlearn_courses";
+    const NEWS_STORAGE_KEY = "flowlearn_news";
+    const SETTINGS_STORAGE_KEY = "flowlearn_settings";
+    const CLASS_STORAGE_KEY = "flowlearn_class_access";
+    const VISITOR_SESSION_KEY = "flowlearn_current_visitor";
+    const SUBJECTS = ["français", "Math", "Histoire", "Géographie", "EMC", "Physique chimie", "SVT", "anglais", "espagnol", "SES"];
+    const SUBJECT_MIGRATIONS = {
+      Francais: "français",
+      "Français": "français",
+      Mathematiques: "Math",
+      "Mathématiques": "Math",
+      "Histoire Geo": "Histoire",
+      Sciences: "Physique chimie",
+      Anglais: "anglais",
+      Espagnol: "espagnol"
+    };
+
+    const defaultCourses = [
+      {
+        title: "Comprendre les fonctions",
+        description: "Definitions, lectures graphiques et premiers exercices guides.",
+        subject: "Math",
+        level: "Base",
+        content: "Objectif: comprendre ce qu'est une fonction et savoir lire une image ou un antecedent sur un graphique.\n\n1. Une fonction associe a un nombre de depart un seul resultat.\n2. On peut la presenter avec une formule, un tableau ou un graphique.\n3. Pour lire une image, on part de l'axe horizontal puis on regarde la valeur obtenue sur l'axe vertical.\n\nExercice: choisis trois valeurs de x, calcule f(x), puis place les points sur un graphique."
+      },
+      {
+        title: "Construire une argumentation",
+        description: "Structure, exemples, connecteurs logiques et conclusion efficace.",
+        subject: "français",
+        level: "Methode",
+        content: "Une argumentation claire suit une progression simple.\n\nIntroduction: presente le sujet et annonce ton idee principale.\nDeveloppement: donne un argument, explique-le, puis ajoute un exemple precis.\nConclusion: reformule ton point de vue et termine avec une phrase nette.\n\nConnecteurs utiles: d'abord, ensuite, cependant, donc, enfin."
+      },
+      {
+        title: "Construire une frise chronologique",
+        description: "Dates, periodes, reperes et lecture des evenements dans le temps.",
+        subject: "Histoire",
+        level: "Methode",
+        content: "Une frise chronologique sert a organiser les evenements dans le temps.\n\nCommence par choisir une echelle reguliere. Place les dates importantes, puis ajoute une courte explication pour chaque evenement.\nTermine en verifiant que les periodes sont lisibles et que l'ordre chronologique est correct."
+      },
+      {
+        title: "Lire et analyser une carte",
+        description: "Legende, echelle, reperes et interpretation des informations.",
+        subject: "Géographie",
+        level: "Methode",
+        content: "Pour analyser une carte, commence par identifier le titre, l'espace represente et la date.\n\nObserve ensuite la legende: les couleurs, les symboles et les fleches donnent le sens des informations.\nRegarde l'echelle pour comprendre les distances.\nTermine en redigeant ce que la carte montre avec deux ou trois idees principales."
+      },
+      {
+        title: "Les bases de la matiere",
+        description: "Atomes, molecules, changements d'etat et vocabulaire scientifique.",
+        subject: "Physique chimie",
+        level: "Introduction",
+        content: "La matiere compose tout ce qui possede une masse et occupe un volume.\n\nElle peut se presenter sous trois etats courants: solide, liquide et gaz.\nUn atome est une petite particule de matiere. Plusieurs atomes lies peuvent former une molecule.\n\nExemple: l'eau est une molecule composee d'atomes d'hydrogene et d'oxygene."
+      }
+    ];
+
+    const defaultNews = [
+      {
+        title: "Bienvenue sur les actualites",
+        date: "2026-05-03",
+        description: "Les prochains evenements, annonces importantes et photos pourront etre ajoutes depuis le panel admin.",
+        photo: ""
+      }
+    ];
+
+    const defaultSettings = {
+      siteName: "FlowLearn",
+      bannerVisible: true,
+      bannerTitle: "Ouverture prochaine",
+      bannerText: "Les premiers cours arrivent bientot par matiere.",
+      bannerColor: "#f59e0b",
+      bannerTextColor: "#ffe8bd",
+      heroKicker: "Plateforme de revision moderne",
+      heroTitle: "Des cours clairs, classes par matiere.",
+      heroSubtitle: "Une base propre pour rassembler des lecons, fiches de revision, exercices et ressources. Le site est pret a evoluer quand tu voudras ajouter les vrais contenus.",
+      footerText: "Plateforme de cours en preparation."
+    };
+
+    const defaultClassState = {
+      whitelistMode: false,
+      names: [],
+      banned: [],
+      whitelisted: ["Malo1410"]
+    };
+
+    const adminModal = document.querySelector("#adminModal");
+    const adminCard = document.querySelector("#adminCard");
+    const openAdmin = document.querySelector("#openAdmin");
+    const closeAdmin = document.querySelector("#closeAdmin");
+    const loginForm = document.querySelector("#loginForm");
+    const adminCode = document.querySelector("#adminCode");
+    const adminError = document.querySelector("#adminError");
+    const adminPanel = document.querySelector("#adminPanel");
+    const accessGate = document.querySelector("#accessGate");
+    const visitorForm = document.querySelector("#visitorForm");
+    const visitorName = document.querySelector("#visitorName");
+    const visitorError = document.querySelector("#visitorError");
+    const visitorGreeting = document.querySelector("#visitorGreeting");
+    const showAdminPanel = document.querySelector("#showAdminPanel");
+    const toggleClassPanel = document.querySelector("#toggleClassPanel");
+    const adminSettingsPanel = document.querySelector("#adminSettingsPanel");
+    const classPanel = document.querySelector("#classPanel");
+    const classFeedback = document.querySelector("#classFeedback");
+    const classNameList = document.querySelector("#classNameList");
+    const whitelistMode = document.querySelector("#whitelistMode");
+    const settingsForm = document.querySelector("#settingsForm");
+    const resetSettings = document.querySelector("#resetSettings");
+    const announcementBar = document.querySelector("#announcementBar");
+    const announcementTitle = document.querySelector("#announcementTitle");
+    const announcementText = document.querySelector("#announcementText");
+    const heroKicker = document.querySelector("#heroKicker");
+    const heroTitle = document.querySelector("#heroTitle");
+    const heroSubtitle = document.querySelector("#heroSubtitle");
+    const footerText = document.querySelector("#footerText");
+    const courseForm = document.querySelector("#courseForm");
+    const courseList = document.querySelector("#courseList");
+    const searchInput = document.querySelector("#search");
+    const subjectFilter = document.querySelector("#subject");
+    const filterForm = document.querySelector("#filterForm");
+    const resetCourses = document.querySelector("#resetCourses");
+    const newCourse = document.querySelector("#newCourse");
+    const cancelEdit = document.querySelector("#cancelEdit");
+    const saveCourse = document.querySelector("#saveCourse");
+    const formTitle = document.querySelector("#formTitle");
+    const adminCourseList = document.querySelector("#adminCourseList");
+    const editingIndex = document.querySelector("#editingIndex");
+    const courseBrowser = document.querySelector("#courseBrowser");
+    const openCourseBrowser = document.querySelector("#openCourseBrowser");
+    const courseBack = document.querySelector("#courseBack");
+    const browserSubjectsView = document.querySelector("#browserSubjectsView");
+    const browserSyllabusView = document.querySelector("#browserSyllabusView");
+    const courseReaderView = document.querySelector("#courseReaderView");
+    const browserSubjects = document.querySelector("#browserSubjects");
+    const selectedSubjectLabel = document.querySelector("#selectedSubjectLabel");
+    const syllabusTitle = document.querySelector("#syllabusTitle");
+    const syllabusList = document.querySelector("#syllabusList");
+    const readerMeta = document.querySelector("#readerMeta");
+    const readerTitle = document.querySelector("#readerTitle");
+    const readerDescription = document.querySelector("#readerDescription");
+    const readerContent = document.querySelector("#readerContent");
+    const newsList = document.querySelector("#newsList");
+    const newsForm = document.querySelector("#newsForm");
+    const newsFormTitle = document.querySelector("#newsFormTitle");
+    const editingNewsIndex = document.querySelector("#editingNewsIndex");
+    const newsPhotoData = document.querySelector("#newsPhotoData");
+    const newsPhoto = document.querySelector("#newsPhoto");
+    const newsPhotoPreview = document.querySelector("#newsPhotoPreview");
+    const newsPhotoUrl = document.querySelector("#newsPhotoUrl");
+    const saveNews = document.querySelector("#saveNews");
+    const newNews = document.querySelector("#newNews");
+    const cancelNewsEdit = document.querySelector("#cancelNewsEdit");
+    const adminNewsList = document.querySelector("#adminNewsList");
+
+    let selectedSubject = "";
+    let browserView = "subjects";
+
+    function getCourses() {
+      try {
+        const savedCourses = localStorage.getItem(STORAGE_KEY);
+        const courses = savedCourses ? JSON.parse(savedCourses) : structuredClone(defaultCourses);
+        return normalizeCourses(courses);
+      } catch {
+        return structuredClone(defaultCourses);
+      }
+    }
+
+    function normalizeCourses(courses) {
+      return courses.map((course) => ({
+        ...course,
+        subject: SUBJECT_MIGRATIONS[course.subject] || course.subject
+      }));
+    }
+
+    function saveCourses(courses) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(normalizeCourses(courses)));
+    }
+
+    function getNews() {
+      try {
+        const savedNews = localStorage.getItem(NEWS_STORAGE_KEY);
+        return savedNews ? JSON.parse(savedNews) : structuredClone(defaultNews);
+      } catch {
+        return structuredClone(defaultNews);
+      }
+    }
+
+    function saveNewsItems(newsItems) {
+      localStorage.setItem(NEWS_STORAGE_KEY, JSON.stringify(newsItems));
+    }
+
+    function getSettings() {
+      try {
+        const savedSettings = localStorage.getItem(SETTINGS_STORAGE_KEY);
+        return { ...defaultSettings, ...(savedSettings ? JSON.parse(savedSettings) : {}) };
+      } catch {
+        return { ...defaultSettings };
+      }
+    }
+
+    function getClassState() {
+      try {
+        const savedState = localStorage.getItem(CLASS_STORAGE_KEY);
+        const state = { ...defaultClassState, ...(savedState ? JSON.parse(savedState) : {}) };
+
+        if (!isNameWhitelisted("Malo1410", state)) {
+          state.whitelisted.push("Malo1410");
+        }
+
+        return state;
+      } catch {
+        return { ...defaultClassState };
+      }
+    }
+
+    function saveClassState(state) {
+      localStorage.setItem(CLASS_STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function normalizeName(name) {
+      return String(name || "").trim().replace(/\s+/g, " ").toLowerCase();
+    }
+
+    function displayName(name) {
+      return String(name || "").trim().replace(/\s+/g, " ");
+    }
+
+    function isNameBanned(name, state = getClassState()) {
+      const normalizedName = normalizeName(name);
+      return state.banned.some((item) => normalizeName(item) === normalizedName);
+    }
+
+    function isNameWhitelisted(name, state = getClassState()) {
+      const normalizedName = normalizeName(name);
+      return state.whitelisted.some((item) => normalizeName(item) === normalizedName);
+    }
+
+    function canVisitorAccess(name, state = getClassState()) {
+      if (isNameBanned(name, state)) {
+        return { allowed: false, message: "Tu n'as pas acces au site." };
+      }
+
+      if (state.whitelistMode && !isNameWhitelisted(name, state)) {
+        return { allowed: false, message: "Le site est en mode whitelist. Ton nom n'a pas encore acces." };
+      }
+
+      return { allowed: true, message: "" };
+    }
+
+    function rememberVisitor(name) {
+      const state = getClassState();
+      const cleanName = displayName(name);
+      const normalizedName = normalizeName(cleanName);
+      const existingEntry = state.names.find((entry) => normalizeName(entry.name) === normalizedName);
+      const now = new Date().toISOString();
+
+      if (existingEntry) {
+        existingEntry.name = cleanName;
+        existingEntry.lastSeen = now;
+        existingEntry.visits = Number(existingEntry.visits || 0) + 1;
+      } else {
+        state.names.unshift({
+          name: cleanName,
+          firstSeen: now,
+          lastSeen: now,
+          visits: 1
+        });
+      }
+
+      saveClassState(state);
+      renderClassList();
+    }
+
+    function setVisitorGreeting(name) {
+      visitorGreeting.textContent = name ? `Bienvenue ${name}` : "";
+    }
+
+    function openAccessGate(message = "") {
+      document.body.classList.add("gate-locked");
+      accessGate.classList.add("is-open");
+      accessGate.setAttribute("aria-hidden", "false");
+      visitorError.textContent = message;
+      visitorError.classList.toggle("is-visible", Boolean(message));
+      visitorName.focus();
+    }
+
+    function closeAccessGate(name) {
+      document.body.classList.remove("gate-locked");
+      accessGate.classList.remove("is-open");
+      accessGate.setAttribute("aria-hidden", "true");
+      setVisitorGreeting(name);
+    }
+
+    function initVisitorGate() {
+      const currentVisitor = sessionStorage.getItem(VISITOR_SESSION_KEY);
+
+      if (!currentVisitor) {
+        openAccessGate();
+        return;
+      }
+
+      const access = canVisitorAccess(currentVisitor);
+      if (!access.allowed) {
+        sessionStorage.removeItem(VISITOR_SESSION_KEY);
+        openAccessGate(access.message);
+        return;
+      }
+
+      closeAccessGate(currentVisitor);
+    }
+
+    function renderClassList() {
+      const state = getClassState();
+      whitelistMode.checked = Boolean(state.whitelistMode);
+      classNameList.innerHTML = "";
+
+      if (state.names.length === 0) {
+        classNameList.innerHTML = '<div class="empty-courses">Aucun nom enregistre pour le moment.</div>';
+        return;
+      }
+
+      state.names.forEach((entry) => {
+        const isBanned = isNameBanned(entry.name, state);
+        const isWhitelisted = isNameWhitelisted(entry.name, state);
+        const statusClass = isBanned ? "banned" : isWhitelisted ? "whitelist" : "allowed";
+        const statusText = isBanned ? "⛔ Banni" : isWhitelisted ? "👑 Whitelist" : "Autorise";
+        const banButtonClass = isBanned ? "btn danger" : "btn secondary";
+        const whitelistButtonClass = isWhitelisted ? "btn admin" : "btn secondary";
+        const banButtonTitle = isBanned ? "Debannir le nom" : "Bannir le nom";
+        const whitelistButtonTitle = isWhitelisted ? "Retirer de la whitelist" : "Mettre en whitelist";
+        const item = document.createElement("article");
+        item.className = "admin-course";
+        item.innerHTML = `
+          <h3>${escapeHtml(entry.name)}</h3>
+          <span class="status-badge ${statusClass}">${statusText}</span>
+          <p>${Number(entry.visits || 1)} passage${Number(entry.visits || 1) > 1 ? "s" : ""}</p>
+          <div class="admin-course-actions">
+            <button class="${banButtonClass}" type="button" title="${banButtonTitle}" data-ban-name="${escapeHtml(entry.name)}">⛔</button>
+            <button class="${whitelistButtonClass}" type="button" title="${whitelistButtonTitle}" data-whitelist-name="${escapeHtml(entry.name)}">👑</button>
+            <button class="btn secondary" type="button" title="Retirer de la whitelist" data-unwhitelist-name="${escapeHtml(entry.name)}">❌</button>
+          </div>
+        `;
+        classNameList.appendChild(item);
+      });
+    }
+
+    function showClassFeedback(message) {
+      classFeedback.textContent = message;
+      classFeedback.classList.add("is-visible");
+      window.setTimeout(() => {
+        classFeedback.classList.remove("is-visible");
+      }, 2600);
+    }
+
+    function updateClassList(name, action) {
+      const state = getClassState();
+      const cleanName = displayName(name);
+      const normalizedName = normalizeName(cleanName);
+      const wasBanned = isNameBanned(cleanName, state);
+      const wasWhitelisted = isNameWhitelisted(cleanName, state);
+
+      if (action === "ban") {
+        state.banned = state.banned.filter((item) => normalizeName(item) !== normalizedName);
+        if (!wasBanned) {
+          state.whitelisted = state.whitelisted.filter((item) => normalizeName(item) !== normalizedName);
+          state.banned.push(cleanName);
+        }
+      }
+
+      if (action === "whitelist") {
+        state.banned = state.banned.filter((item) => normalizeName(item) !== normalizedName);
+        state.whitelisted = state.whitelisted.filter((item) => normalizeName(item) !== normalizedName);
+        if (!wasWhitelisted) {
+          state.whitelisted.push(cleanName);
+        }
+      }
+
+      if (action === "unwhitelist") {
+        state.whitelisted = state.whitelisted.filter((item) => normalizeName(item) !== normalizedName);
+      }
+
+      saveClassState(state);
+      renderClassList();
+      if (action === "ban") showClassFeedback(wasBanned ? `${cleanName} n'est plus banni.` : `${cleanName} a bien ete banni.`);
+      if (action === "whitelist") showClassFeedback(wasWhitelisted ? `${cleanName} a bien ete retire de la whitelist.` : `${cleanName} a bien ete ajoute a la whitelist.`);
+      if (action === "unwhitelist") showClassFeedback(`${cleanName} a bien ete retire de la whitelist.`);
+      initVisitorGate();
+    }
+
+    function saveSettings(settings) {
+      localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(settings));
+    }
+
+    function applySettings() {
+      const settings = getSettings();
+
+      document.querySelectorAll("[data-site-name]").forEach((element) => {
+        element.textContent = settings.siteName;
+      });
+
+      announcementBar.classList.toggle("is-hidden", !settings.bannerVisible);
+      announcementTitle.textContent = settings.bannerTitle;
+      announcementText.textContent = settings.bannerText;
+      announcementBar.style.background = `linear-gradient(90deg, ${settings.bannerColor}, rgba(56, 189, 248, 0.1))`;
+      announcementBar.style.borderBottomColor = settings.bannerColor;
+      announcementBar.querySelector(".container").style.color = settings.bannerTextColor;
+
+      heroKicker.textContent = settings.heroKicker;
+      heroTitle.textContent = settings.heroTitle;
+      heroSubtitle.textContent = settings.heroSubtitle;
+      footerText.textContent = settings.footerText;
+      document.title = `${settings.siteName} - Cours et matieres`;
+    }
+
+    function populateSettingsForm() {
+      const settings = getSettings();
+
+      document.querySelector("#settingSiteName").value = settings.siteName;
+      document.querySelector("#settingBannerVisible").value = String(settings.bannerVisible);
+      document.querySelector("#settingBannerTitle").value = settings.bannerTitle;
+      document.querySelector("#settingBannerText").value = settings.bannerText;
+      document.querySelector("#settingBannerColor").value = settings.bannerColor;
+      document.querySelector("#settingBannerTextColor").value = settings.bannerTextColor;
+      document.querySelector("#settingHeroKicker").value = settings.heroKicker;
+      document.querySelector("#settingHeroTitle").value = settings.heroTitle;
+      document.querySelector("#settingHeroSubtitle").value = settings.heroSubtitle;
+      document.querySelector("#settingFooterText").value = settings.footerText;
+    }
+
+    function getSubjects() {
+      return SUBJECTS;
+    }
+
+    function renderSubjectFilter() {
+      const currentSubject = subjectFilter.value;
+      const subjects = getSubjects();
+
+      subjectFilter.innerHTML = '<option>Toutes les matieres</option>';
+      subjects.forEach((subject) => {
+        const option = document.createElement("option");
+        option.textContent = subject;
+        subjectFilter.appendChild(option);
+      });
+
+      subjectFilter.value = subjects.includes(currentSubject) ? currentSubject : "Toutes les matieres";
+    }
+
+    function renderCourses() {
+      const search = searchInput.value.trim().toLowerCase();
+      const subject = subjectFilter.value;
+      const filteredCourses = getCourses().filter((course) => {
+        const text = `${course.title} ${course.description} ${course.content || ""}`.toLowerCase();
+        const matchesSearch = text.includes(search);
+        const matchesSubject = subject === "Toutes les matieres" || course.subject === subject;
+        return matchesSearch && matchesSubject;
+      });
+
+      courseList.innerHTML = "";
+
+      if (filteredCourses.length === 0) {
+        courseList.innerHTML = '<div class="empty-courses">Aucun cours ne correspond a cette recherche.</div>';
+        return;
+      }
+
+      filteredCourses.forEach((course) => {
+        const row = document.createElement("article");
+        row.className = "course-row";
+        const levelText = course.level ? ` - ${course.level}` : "";
+
+        row.innerHTML = `
+          <div>
+            <h3>${escapeHtml(course.title)}</h3>
+            <p>${escapeHtml(course.description)}</p>
+          </div>
+          <span class="level">${escapeHtml(course.subject + levelText)}</span>
+        `;
+
+        courseList.appendChild(row);
+      });
+    }
+
+    function renderNews() {
+      const newsItems = getNews().sort((a, b) => String(b.date).localeCompare(String(a.date)));
+      newsList.innerHTML = "";
+
+      if (newsItems.length === 0) {
+        newsList.innerHTML = '<div class="empty-courses">Aucune actualite pour le moment.</div>';
+        return;
+      }
+
+      newsItems.forEach((item) => {
+        const article = document.createElement("article");
+        article.className = "news-card";
+        const photo = item.photo
+          ? `<img class="news-photo" src="${escapeHtml(item.photo)}" alt="${escapeHtml(item.title)}">`
+          : '<div class="news-photo" aria-hidden="true"></div>';
+
+        article.innerHTML = `
+          ${photo}
+          <div class="news-body">
+            <span class="news-date">${formatDate(item.date)}</span>
+            <h3>${escapeHtml(item.title)}</h3>
+            <p>${escapeHtml(item.description)}</p>
+          </div>
+        `;
+
+        newsList.appendChild(article);
+      });
+    }
+
+    function renderAdminCourseList() {
+      const courses = getCourses();
+      adminCourseList.innerHTML = "";
+
+      if (courses.length === 0) {
+        adminCourseList.innerHTML = '<div class="empty-courses">Aucun cours pour le moment.</div>';
+        return;
+      }
+
+      courses.forEach((course, index) => {
+        const item = document.createElement("article");
+        item.className = "admin-course";
+        item.innerHTML = `
+          <h3>${escapeHtml(course.title)}</h3>
+          <p>${escapeHtml(course.subject)}${course.level ? ` - ${escapeHtml(course.level)}` : ""}</p>
+          <div class="admin-course-actions">
+            <button class="btn secondary" type="button" data-edit-course="${index}">Modifier</button>
+            <button class="btn danger" type="button" data-delete-course="${index}">Supprimer</button>
+          </div>
+        `;
+        adminCourseList.appendChild(item);
+      });
+    }
+
+    function renderAdminNewsList() {
+      const newsItems = getNews();
+      adminNewsList.innerHTML = "";
+
+      if (newsItems.length === 0) {
+        adminNewsList.innerHTML = '<div class="empty-courses">Aucune actualite pour le moment.</div>';
+        return;
+      }
+
+      newsItems.forEach((item, index) => {
+        const article = document.createElement("article");
+        article.className = "admin-course";
+        article.innerHTML = `
+          <h3>${escapeHtml(item.title)}</h3>
+          <p>${formatDate(item.date)}</p>
+          <div class="admin-course-actions">
+            <button class="btn secondary" type="button" data-edit-news="${index}">Modifier</button>
+            <button class="btn danger" type="button" data-delete-news="${index}">Supprimer</button>
+          </div>
+        `;
+        adminNewsList.appendChild(article);
+      });
+    }
+
+    function resetAdminForm() {
+      courseForm.reset();
+      editingIndex.value = "";
+      formTitle.textContent = "Ajouter un cours";
+      saveCourse.textContent = "Ajouter le cours";
+      cancelEdit.style.display = "none";
+    }
+
+    function resetNewsForm() {
+      newsForm.reset();
+      editingNewsIndex.value = "";
+      newsPhotoData.value = "";
+      newsPhotoPreview.removeAttribute("src");
+      newsPhotoPreview.classList.remove("is-visible");
+      newsFormTitle.textContent = "Ajouter une actualite";
+      saveNews.textContent = "Ajouter l'actualite";
+      cancelNewsEdit.style.display = "none";
+    }
+
+    function fillCourseForm(index) {
+      const course = getCourses()[index];
+      if (!course) return;
+
+      editingIndex.value = String(index);
+      document.querySelector("#courseTitle").value = course.title || "";
+      document.querySelector("#courseSubject").value = SUBJECTS.includes(course.subject) ? course.subject : SUBJECTS[0];
+      document.querySelector("#courseLevel").value = course.level || "";
+      document.querySelector("#courseDescription").value = course.description || "";
+      document.querySelector("#courseContent").value = course.content || course.description || "";
+      formTitle.textContent = "Modifier un cours";
+      saveCourse.textContent = "Enregistrer les modifications";
+      cancelEdit.style.display = "inline-flex";
+      document.querySelector("#courseTitle").focus();
+    }
+
+    function fillNewsForm(index) {
+      const item = getNews()[index];
+      if (!item) return;
+
+      editingNewsIndex.value = String(index);
+      document.querySelector("#newsTitle").value = item.title || "";
+      document.querySelector("#newsDate").value = item.date || "";
+      document.querySelector("#newsDescription").value = item.description || "";
+      newsPhotoUrl.value = item.photo && !item.photo.startsWith("data:") ? item.photo : "";
+      newsPhotoData.value = item.photo || "";
+
+      if (item.photo) {
+        newsPhotoPreview.src = item.photo;
+        newsPhotoPreview.classList.add("is-visible");
+      } else {
+        newsPhotoPreview.removeAttribute("src");
+        newsPhotoPreview.classList.remove("is-visible");
+      }
+
+      newsFormTitle.textContent = "Modifier une actualite";
+      saveNews.textContent = "Enregistrer les modifications";
+      cancelNewsEdit.style.display = "inline-flex";
+      document.querySelector("#newsTitle").focus();
+    }
+
+    function deleteCourse(index) {
+      const courses = getCourses();
+      const course = courses[index];
+      if (!course || !confirm(`Supprimer le cours "${course.title}" ?`)) return;
+
+      courses.splice(index, 1);
+      saveCourses(courses);
+      refreshAllCourseViews();
+      resetAdminForm();
+    }
+
+    function deleteNews(index) {
+      const newsItems = getNews();
+      const item = newsItems[index];
+      if (!item || !confirm(`Supprimer l'actualite "${item.title}" ?`)) return;
+
+      newsItems.splice(index, 1);
+      saveNewsItems(newsItems);
+      renderNews();
+      renderAdminNewsList();
+      resetNewsForm();
+    }
+
+    function refreshAllCourseViews() {
+      renderSubjectFilter();
+      renderCourses();
+      renderAdminCourseList();
+      renderNews();
+      renderAdminNewsList();
+      if (courseBrowser.classList.contains("is-open")) {
+        if (browserView === "subjects") renderBrowserSubjects();
+        if (browserView === "syllabus") renderSyllabus(selectedSubject);
+        if (browserView === "reader") showSubjectsView();
+      }
+    }
+
+    function openAdminModal() {
+      adminModal.classList.add("is-open");
+      adminModal.setAttribute("aria-hidden", "false");
+      populateSettingsForm();
+      renderClassList();
+      renderAdminCourseList();
+      renderAdminNewsList();
+
+      if (adminPanel.classList.contains("is-visible")) {
+        adminCard.classList.add("admin-wide");
+        document.querySelector("#courseTitle").focus();
+        return;
+      }
+
+      adminCode.focus();
+    }
+
+    function closeAdminModal() {
+      adminModal.classList.remove("is-open");
+      adminModal.setAttribute("aria-hidden", "true");
+      adminError.classList.remove("is-visible");
+    }
+
+    function openCourses(subject = "") {
+      courseBrowser.classList.add("is-open");
+      courseBrowser.setAttribute("aria-hidden", "false");
+      if (subject) {
+        showSyllabusView(subject);
+        return;
+      }
+
+      showSubjectsView();
+    }
+
+    function closeCourses() {
+      courseBrowser.classList.remove("is-open");
+      courseBrowser.setAttribute("aria-hidden", "true");
+      browserView = "subjects";
+    }
+
+    function showSubjectsView() {
+      browserView = "subjects";
+      selectedSubject = "";
+      browserSubjectsView.hidden = false;
+      browserSyllabusView.hidden = true;
+      courseReaderView.hidden = true;
+      renderBrowserSubjects();
+    }
+
+    function showSyllabusView(subject) {
+      browserView = "syllabus";
+      selectedSubject = subject;
+      browserSubjectsView.hidden = true;
+      browserSyllabusView.hidden = false;
+      courseReaderView.hidden = true;
+      selectedSubjectLabel.textContent = "Sommaire";
+      syllabusTitle.textContent = subject;
+      renderSyllabus(subject);
+    }
+
+    function showReaderView(index) {
+      const course = getCourses()[index];
+      if (!course) return;
+
+      browserView = "reader";
+      browserSubjectsView.hidden = true;
+      browserSyllabusView.hidden = true;
+      courseReaderView.hidden = false;
+      readerMeta.textContent = `${course.subject}${course.level ? ` - ${course.level}` : ""}`;
+      readerTitle.textContent = course.title;
+      readerDescription.textContent = course.description;
+      readerContent.textContent = course.content || course.description;
+    }
+
+    function renderBrowserSubjects() {
+      const courses = getCourses();
+      const subjects = getSubjects();
+      browserSubjects.innerHTML = "";
+
+      if (subjects.length === 0) {
+        browserSubjects.innerHTML = '<div class="empty-courses">Aucune matiere disponible.</div>';
+        return;
+      }
+
+      subjects.forEach((subject) => {
+        const count = courses.filter((course) => course.subject === subject).length;
+        const card = document.createElement("button");
+        card.className = "browser-subject";
+        card.type = "button";
+        card.innerHTML = `
+          <strong>${escapeHtml(subject)}</strong>
+          <span>${count} cours disponible${count > 1 ? "s" : ""}</span>
+        `;
+        card.addEventListener("click", () => showSyllabusView(subject));
+        browserSubjects.appendChild(card);
+      });
+    }
+
+    function renderSyllabus(subject) {
+      const courses = getCourses()
+        .map((course, index) => ({ ...course, index }))
+        .filter((course) => course.subject === subject);
+
+      syllabusList.innerHTML = "";
+
+      if (courses.length === 0) {
+        syllabusList.innerHTML = '<div class="empty-courses">Aucun cours dans cette matiere.</div>';
+        return;
+      }
+
+      courses.forEach((course) => {
+        const item = document.createElement("button");
+        item.className = "syllabus-item";
+        item.type = "button";
+        item.innerHTML = `
+          <div>
+            <h3>${escapeHtml(course.title)}</h3>
+            <p>${escapeHtml(course.description)}</p>
+          </div>
+          <span class="level">${escapeHtml(course.level || "Cours")}</span>
+        `;
+        item.addEventListener("click", () => showReaderView(course.index));
+        syllabusList.appendChild(item);
+      });
+    }
+
+    function formatDate(value) {
+      if (!value) return "Date a definir";
+      const [year, month, day] = String(value).split("-");
+      if (!year || !month || !day) return value;
+      return `${day}/${month}/${year}`;
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    openAdmin.addEventListener("click", openAdminModal);
+    closeAdmin.addEventListener("click", closeAdminModal);
+    openCourseBrowser.addEventListener("click", () => openCourses());
+    showAdminPanel.addEventListener("click", () => {
+      adminSettingsPanel.classList.add("is-visible");
+      classPanel.classList.remove("is-visible");
+    });
+
+    toggleClassPanel.addEventListener("click", () => {
+      adminSettingsPanel.classList.remove("is-visible");
+      classPanel.classList.add("is-visible");
+      renderClassList();
+    });
+
+    whitelistMode.addEventListener("change", () => {
+      const state = getClassState();
+      state.whitelistMode = whitelistMode.checked;
+      const currentVisitor = sessionStorage.getItem(VISITOR_SESSION_KEY);
+
+      if (state.whitelistMode && currentVisitor && !isNameWhitelisted(currentVisitor, state)) {
+        state.whitelisted.push(displayName(currentVisitor));
+      }
+
+      saveClassState(state);
+      renderClassList();
+      initVisitorGate();
+    });
+
+    classNameList.addEventListener("click", (event) => {
+      const banButton = event.target.closest("[data-ban-name]");
+      const whitelistButton = event.target.closest("[data-whitelist-name]");
+      const unwhitelistButton = event.target.closest("[data-unwhitelist-name]");
+
+      if (banButton) {
+        updateClassList(banButton.dataset.banName, "ban");
+      }
+
+      if (whitelistButton) {
+        updateClassList(whitelistButton.dataset.whitelistName, "whitelist");
+      }
+
+      if (unwhitelistButton) {
+        updateClassList(unwhitelistButton.dataset.unwhitelistName, "unwhitelist");
+      }
+    });
+
+    visitorForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const cleanName = displayName(visitorName.value);
+      if (!cleanName) return;
+
+      rememberVisitor(cleanName);
+      const access = canVisitorAccess(cleanName);
+
+      if (!access.allowed) {
+        visitorError.textContent = access.message;
+        visitorError.classList.add("is-visible");
+        return;
+      }
+
+      sessionStorage.setItem(VISITOR_SESSION_KEY, cleanName);
+      visitorForm.reset();
+      closeAccessGate(cleanName);
+    });
+
+    document.querySelectorAll("[data-subject-card]").forEach((card) => {
+      card.addEventListener("click", () => openCourses(card.dataset.subjectCard));
+    });
+    document.querySelectorAll("[data-open-courses]").forEach((link) => {
+      link.addEventListener("click", (event) => {
+        event.preventDefault();
+        openCourses();
+      });
+    });
+
+    courseBack.addEventListener("click", () => {
+      if (browserView === "reader") {
+        showSyllabusView(selectedSubject);
+        return;
+      }
+
+      if (browserView === "syllabus") {
+        showSubjectsView();
+        return;
+      }
+
+      closeCourses();
+    });
+
+    filterForm.addEventListener("submit", (event) => event.preventDefault());
+    searchInput.addEventListener("input", renderCourses);
+    subjectFilter.addEventListener("change", renderCourses);
+
+    adminModal.addEventListener("click", (event) => {
+      if (event.target === adminModal) {
+        closeAdminModal();
+      }
+    });
+
+    loginForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      if (adminCode.value === ADMIN_CODE) {
+        adminCard.classList.add("admin-wide");
+        loginForm.style.display = "none";
+        adminPanel.classList.add("is-visible");
+        adminError.classList.remove("is-visible");
+        populateSettingsForm();
+        renderClassList();
+        resetAdminForm();
+        resetNewsForm();
+        renderAdminCourseList();
+        renderAdminNewsList();
+        return;
+      }
+
+      adminError.classList.add("is-visible");
+      adminCode.select();
+    });
+
+    courseForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const courses = getCourses();
+      const courseData = {
+        title: document.querySelector("#courseTitle").value.trim(),
+        subject: document.querySelector("#courseSubject").value,
+        level: document.querySelector("#courseLevel").value.trim(),
+        description: document.querySelector("#courseDescription").value.trim(),
+        content: document.querySelector("#courseContent").value.trim()
+      };
+
+      if (editingIndex.value !== "") {
+        courses[Number(editingIndex.value)] = courseData;
+      } else {
+        courses.unshift(courseData);
+      }
+
+      saveCourses(courses);
+      resetAdminForm();
+      refreshAllCourseViews();
+    });
+
+    adminCourseList.addEventListener("click", (event) => {
+      const editButton = event.target.closest("[data-edit-course]");
+      const deleteButton = event.target.closest("[data-delete-course]");
+
+      if (editButton) {
+        fillCourseForm(Number(editButton.dataset.editCourse));
+      }
+
+      if (deleteButton) {
+        deleteCourse(Number(deleteButton.dataset.deleteCourse));
+      }
+    });
+
+    adminNewsList.addEventListener("click", (event) => {
+      const editButton = event.target.closest("[data-edit-news]");
+      const deleteButton = event.target.closest("[data-delete-news]");
+
+      if (editButton) {
+        fillNewsForm(Number(editButton.dataset.editNews));
+      }
+
+      if (deleteButton) {
+        deleteNews(Number(deleteButton.dataset.deleteNews));
+      }
+    });
+
+    newCourse.addEventListener("click", resetAdminForm);
+    cancelEdit.addEventListener("click", resetAdminForm);
+    newNews.addEventListener("click", resetNewsForm);
+    cancelNewsEdit.addEventListener("click", resetNewsForm);
+
+    settingsForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      saveSettings({
+        siteName: document.querySelector("#settingSiteName").value.trim() || defaultSettings.siteName,
+        bannerVisible: document.querySelector("#settingBannerVisible").value === "true",
+        bannerTitle: document.querySelector("#settingBannerTitle").value.trim(),
+        bannerText: document.querySelector("#settingBannerText").value.trim(),
+        bannerColor: document.querySelector("#settingBannerColor").value,
+        bannerTextColor: document.querySelector("#settingBannerTextColor").value,
+        heroKicker: document.querySelector("#settingHeroKicker").value.trim(),
+        heroTitle: document.querySelector("#settingHeroTitle").value.trim(),
+        heroSubtitle: document.querySelector("#settingHeroSubtitle").value.trim(),
+        footerText: document.querySelector("#settingFooterText").value.trim()
+      });
+
+      applySettings();
+      populateSettingsForm();
+    });
+
+    resetSettings.addEventListener("click", () => {
+      if (!confirm("Revenir aux textes et couleurs par defaut ?")) return;
+
+      saveSettings({ ...defaultSettings });
+      applySettings();
+      populateSettingsForm();
+    });
+
+    newsPhoto.addEventListener("change", () => {
+      const file = newsPhoto.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        newsPhotoData.value = reader.result;
+        newsPhotoUrl.value = "";
+        newsPhotoPreview.src = reader.result;
+        newsPhotoPreview.classList.add("is-visible");
+      });
+      reader.readAsDataURL(file);
+    });
+
+    newsPhotoUrl.addEventListener("input", () => {
+      const url = newsPhotoUrl.value.trim();
+      if (!url) return;
+
+      newsPhotoData.value = "";
+      newsPhotoPreview.src = url;
+      newsPhotoPreview.classList.add("is-visible");
+    });
+
+    newsForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const newsItems = getNews();
+      const newsData = {
+        title: document.querySelector("#newsTitle").value.trim(),
+        date: document.querySelector("#newsDate").value,
+        description: document.querySelector("#newsDescription").value.trim(),
+        photo: newsPhotoData.value || newsPhotoUrl.value.trim()
+      };
+
+      if (editingNewsIndex.value !== "") {
+        newsItems[Number(editingNewsIndex.value)] = newsData;
+      } else {
+        newsItems.unshift(newsData);
+      }
+
+      saveNewsItems(newsItems);
+      resetNewsForm();
+      renderNews();
+      renderAdminNewsList();
+    });
+
+    resetCourses.addEventListener("click", () => {
+      if (!confirm("Revenir aux cours d'exemple ? Les cours ajoutes seront remplaces.")) return;
+      saveCourses(structuredClone(defaultCourses));
+      resetAdminForm();
+      refreshAllCourseViews();
+    });
+
+    resetAdminForm();
+    resetNewsForm();
+    applySettings();
+    populateSettingsForm();
+    renderClassList();
+    renderSubjectFilter();
+    renderCourses();
+    renderNews();
+    initVisitorGate();
+  </script>
+  <script type="module">
+    const firebaseConfig = {
+      apiKey: "AIzaSyDzyz3FXGXQMKnRNneXuvcWB_m5sLCFx6M",
+      authDomain: "nd-64612.firebaseapp.com",
+      projectId: "nd-64612",
+      storageBucket: "nd-64612.firebasestorage.app",
+      messagingSenderId: "665169411169",
+      appId: "1:665169411169:web:60a1b0e7f33e4bce6b7e20",
+      measurementId: "G-1TSX99RNLS"
+    };
+
+    const authModal = document.querySelector("#authModal");
+    const openAuth = document.querySelector("#openAuth");
+    const closeAuth = document.querySelector("#closeAuth");
+    const showLogin = document.querySelector("#showLogin");
+    const showSignup = document.querySelector("#showSignup");
+    const loginAccountForm = document.querySelector("#loginAccountForm");
+    const signupAccountForm = document.querySelector("#signupAccountForm");
+    const authStatusMessage = document.querySelector("#authStatusMessage");
+    const authUserBox = document.querySelector("#authUserBox");
+    const authUserName = document.querySelector("#authUserName");
+    const authUserEmail = document.querySelector("#authUserEmail");
+    const logoutAccount = document.querySelector("#logoutAccount");
+    const accountStatus = document.querySelector("#accountStatus");
+
+    const firebaseIsConfigured = Object.values(firebaseConfig).every((value) => {
+      return value && !String(value).includes("REMPLACE_MOI") && !String(value).includes("TON-PROJET");
+    });
+
+    let auth = null;
+    let createUserWithEmailAndPassword = null;
+    let signInWithEmailAndPassword = null;
+    let signOut = null;
+    let updateProfile = null;
+
+    function setAuthStatus(message, isError = false) {
+      authStatusMessage.textContent = message;
+      authStatusMessage.classList.toggle("is-visible", Boolean(message));
+      authStatusMessage.classList.toggle("is-error", isError);
+    }
+
+    function openAuthModal() {
+      authModal.classList.add("is-open");
+      authModal.setAttribute("aria-hidden", "false");
+      setTimeout(() => {
+        const visibleInput = authModal.querySelector(".auth-panel.is-visible input");
+        if (visibleInput) visibleInput.focus();
+      }, 0);
+    }
+
+    function closeAuthModal() {
+      authModal.classList.remove("is-open");
+      authModal.setAttribute("aria-hidden", "true");
+      setAuthStatus("");
+    }
+
+    function switchAuthPanel(panel) {
+      const showSignupPanel = panel === "signup";
+      loginAccountForm.classList.toggle("is-visible", !showSignupPanel);
+      signupAccountForm.classList.toggle("is-visible", showSignupPanel);
+      showLogin.classList.toggle("is-active", !showSignupPanel);
+      showSignup.classList.toggle("is-active", showSignupPanel);
+      showLogin.setAttribute("aria-selected", String(!showSignupPanel));
+      showSignup.setAttribute("aria-selected", String(showSignupPanel));
+      setAuthStatus("");
+    }
+
+    function firebaseErrorMessage(error) {
+      const code = error?.code || "";
+
+      if (code.includes("auth/email-already-in-use")) return "Cet email est deja utilise.";
+      if (code.includes("auth/invalid-email")) return "L'email n'est pas valide.";
+      if (code.includes("auth/weak-password")) return "Le mot de passe doit contenir au moins 6 caracteres.";
+      if (code.includes("auth/invalid-credential")) return "Email ou mot de passe incorrect.";
+      if (code.includes("auth/network-request-failed")) return "Connexion impossible. Verifie internet.";
+
+      return "Une erreur Firebase est arrivee. Verifie la configuration du projet.";
+    }
+
+    function setFormsDisabled(disabled) {
+      loginAccountForm.querySelectorAll("input, button").forEach((field) => field.disabled = disabled);
+      signupAccountForm.querySelectorAll("input, button").forEach((field) => field.disabled = disabled);
+      logoutAccount.disabled = disabled;
+    }
+
+    openAuth.addEventListener("click", openAuthModal);
+    closeAuth.addEventListener("click", closeAuthModal);
+    showLogin.addEventListener("click", () => switchAuthPanel("login"));
+    showSignup.addEventListener("click", () => switchAuthPanel("signup"));
+
+    authModal.addEventListener("click", (event) => {
+      if (event.target === authModal) closeAuthModal();
+    });
+
+    async function initFirebaseAuth() {
+      try {
+        setFormsDisabled(true);
+        setAuthStatus("Chargement de Firebase...");
+
+        const appModule = await import("https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js");
+        const authModule = await import("https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js");
+        const app = appModule.getApps().length
+          ? appModule.getApp()
+          : appModule.initializeApp(firebaseConfig);
+
+        createUserWithEmailAndPassword = authModule.createUserWithEmailAndPassword;
+        signInWithEmailAndPassword = authModule.signInWithEmailAndPassword;
+        signOut = authModule.signOut;
+        updateProfile = authModule.updateProfile;
+        auth = authModule.getAuth(app);
+        setFormsDisabled(false);
+        setAuthStatus("");
+
+        authModule.onAuthStateChanged(auth, (user) => {
+          const signedIn = Boolean(user);
+          authUserBox.classList.toggle("is-visible", signedIn);
+          loginAccountForm.style.display = signedIn ? "none" : "";
+          signupAccountForm.style.display = signedIn ? "none" : "";
+          showLogin.disabled = signedIn;
+          showSignup.disabled = signedIn;
+
+          if (!user) {
+            accountStatus.textContent = "";
+            authUserName.textContent = "Compte connecte";
+            authUserEmail.textContent = "";
+            loginAccountForm.style.display = "";
+            signupAccountForm.style.display = "";
+            showLogin.disabled = false;
+            showSignup.disabled = false;
+            return;
+          }
+
+          const label = user.displayName || user.email || "Compte";
+          accountStatus.textContent = label;
+          authUserName.textContent = label;
+          authUserEmail.textContent = user.email || "";
+          setAuthStatus("Tu es connecte.");
+        });
+      } catch (error) {
+        setFormsDisabled(true);
+        setAuthStatus("Firebase n'a pas pu charger. Verifie internet et la configuration du projet.", true);
+      }
+    }
+
+    if (!firebaseIsConfigured) {
+      setFormsDisabled(true);
+      accountStatus.textContent = "";
+      setAuthStatus("Firebase n'est pas encore configure. Remplis firebaseConfig dans le fichier HTML.", true);
+    } else {
+      initFirebaseAuth();
+    }
+
+    loginAccountForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (!auth || !signInWithEmailAndPassword) {
+        setAuthStatus("Firebase n'est pas encore pret.", true);
+        return;
+      }
+
+      setAuthStatus("Connexion en cours...");
+      const email = document.querySelector("#loginEmail").value.trim();
+      const password = document.querySelector("#loginPassword").value;
+
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        loginAccountForm.reset();
+        setAuthStatus("Connexion reussie.");
+      } catch (error) {
+        setAuthStatus(firebaseErrorMessage(error), true);
+      }
+    });
+
+    signupAccountForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (!auth || !createUserWithEmailAndPassword) {
+        setAuthStatus("Firebase n'est pas encore pret.", true);
+        return;
+      }
+
+      setAuthStatus("Creation du compte...");
+      const displayName = document.querySelector("#signupName").value.trim();
+      const email = document.querySelector("#signupEmail").value.trim();
+      const password = document.querySelector("#signupPassword").value;
+
+      try {
+        const credential = await createUserWithEmailAndPassword(auth, email, password);
+        if (displayName) {
+          await updateProfile(credential.user, { displayName });
+        }
+        signupAccountForm.reset();
+        setAuthStatus("Compte cree et connecte.");
+      } catch (error) {
+        setAuthStatus(firebaseErrorMessage(error), true);
+      }
+    });
+
+    logoutAccount.addEventListener("click", async () => {
+      if (!auth || !signOut) {
+        setAuthStatus("Firebase n'est pas encore pret.", true);
+        return;
+      }
+
+      try {
+        await signOut(auth);
+        switchAuthPanel("login");
+        loginAccountForm.style.display = "";
+        setAuthStatus("Tu es deconnecte.");
+      } catch (error) {
+        setAuthStatus(firebaseErrorMessage(error), true);
+      }
+    });
+  </script>
+  <script type="module" src="script.js"></script>
+</body>
+</html>
