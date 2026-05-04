@@ -35,6 +35,7 @@ const forumStatus = document.querySelector("#forumStatus");
 const sendMessage = document.querySelector("#sendMessage");
 const profileStatus = document.querySelector("#profileStatus");
 const usernameColorPicker = document.querySelector("#usernameColorPicker");
+const accountRoleStatus = document.querySelector("#accountRoleStatus");
 const tagAdminPanel = document.querySelector("#tagAdminPanel");
 const tagAdminStatus = document.querySelector("#tagAdminStatus");
 const tagForm = document.querySelector("#tagForm");
@@ -141,6 +142,7 @@ onAuthStateChanged(auth, (user) => {
     setForumStatus(`Connecte en tant que ${getPseudo(user)}.`);
   } else {
     setProfileUsernameColor(DEFAULT_USERNAME_COLOR);
+    accountRoleStatus.textContent = "Role: utilisateur";
     setProfileStatus("Connecte-toi pour changer la couleur du pseudo.");
     setForumStatus("Connecte-toi pour envoyer un message.");
     setTagAdminStatus("Reserve aux administrateurs Firebase.");
@@ -218,9 +220,11 @@ usernameColorPicker.addEventListener("change", async () => {
 });
 
 function renderAdminVisibility() {
-  tagAdminPanel.classList.toggle("is-visible", isCurrentUserAdmin());
+  const admin = isCurrentUserAdmin();
+  tagAdminPanel.classList.toggle("is-visible", admin);
+  accountRoleStatus.textContent = admin ? "Role: admin" : "Role: utilisateur";
 
-  if (isCurrentUserAdmin()) {
+  if (admin) {
     setTagAdminStatus("Mode admin actif.");
     renderTagList();
     renderUserTagList();
