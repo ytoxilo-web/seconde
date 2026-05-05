@@ -478,119 +478,6 @@
       white-space: nowrap;
     }
 
-    .discussion-panel {
-      overflow: hidden;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: #0c111c;
-      box-shadow: var(--shadow);
-    }
-
-    .discussion-top {
-      min-height: 68px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-      padding: 16px 20px;
-      border-bottom: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.035);
-    }
-
-    .discussion-channel {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      min-width: 0;
-    }
-
-    .discussion-icon {
-      width: 40px;
-      height: 40px;
-      display: grid;
-      place-items: center;
-      flex: 0 0 auto;
-      border-radius: var(--radius);
-      background: rgba(56, 189, 248, 0.14);
-      color: #b9ecff;
-      font-size: 1.35rem;
-      font-weight: 900;
-    }
-
-    .discussion-channel h3 {
-      margin: 0;
-      font-size: 1.05rem;
-    }
-
-    .discussion-channel p {
-      margin: 2px 0 0;
-      color: var(--muted);
-      font-size: 0.9rem;
-    }
-
-    .discussion-live {
-      padding: 6px 10px;
-      border: 1px solid rgba(34, 197, 94, 0.28);
-      border-radius: 999px;
-      background: rgba(34, 197, 94, 0.1);
-      color: #adf7c6;
-      font-size: 0.78rem;
-      font-weight: 900;
-      white-space: nowrap;
-    }
-
-    .forum-messages {
-      height: min(58vh, 560px);
-      min-height: 360px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      padding: 20px;
-      background:
-        linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
-        #0a0f19;
-      background-size: 100% 48px;
-    }
-
-    .forum-message {
-      display: grid;
-      grid-template-columns: 42px minmax(0, 1fr);
-      gap: 12px;
-      max-width: 780px;
-    }
-
-    .forum-message::before {
-      content: attr(data-initial);
-      width: 42px;
-      height: 42px;
-      display: grid;
-      place-items: center;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--brand), var(--brand-2));
-      background-position: center;
-      background-size: cover;
-      color: #04111d;
-      font-weight: 950;
-    }
-
-    .forum-message-body {
-      min-width: 0;
-      padding: 12px 14px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: var(--radius);
-      background: var(--panel-2);
-    }
-
-    .forum-message-head {
-      display: flex;
-      align-items: baseline;
-      gap: 10px;
-      margin-bottom: 6px;
-      font-size: 0.9rem;
-      font-weight: 900;
-    }
-
     .username {
       color: #b9ecff;
     }
@@ -605,58 +492,6 @@
       line-height: 1.2;
       text-transform: uppercase;
       vertical-align: middle;
-    }
-
-    .forum-message-date {
-      color: var(--muted);
-      font-size: 0.78rem;
-      font-weight: 700;
-      white-space: nowrap;
-    }
-
-    .forum-message p {
-      margin: 0;
-      color: var(--text);
-      line-height: 1.55;
-      overflow-wrap: anywhere;
-    }
-
-    .forum-form {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 12px;
-      align-items: end;
-      padding: 16px;
-      border-top: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.035);
-    }
-
-    .forum-input-wrap label {
-      margin-bottom: 8px;
-    }
-
-    .forum-form textarea {
-      min-height: 52px;
-      max-height: 160px;
-      margin-bottom: 0;
-      resize: vertical;
-      background: #0a101b;
-    }
-
-    .forum-form .btn {
-      min-height: 52px;
-      margin-bottom: 0;
-    }
-
-    .forum-status {
-      grid-column: 1 / -1;
-      margin: -2px 0 0;
-      color: var(--muted);
-      font-weight: 800;
-    }
-
-    .forum-status.is-error {
-      color: #fecaca;
     }
 
     .faq {
@@ -1413,29 +1248,6 @@
         grid-template-columns: 1fr;
       }
 
-      .discussion-top {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-
-      .forum-messages {
-        height: 460px;
-        padding: 14px;
-      }
-
-      .forum-message {
-        grid-template-columns: 36px minmax(0, 1fr);
-      }
-
-      .forum-message::before {
-        width: 36px;
-        height: 36px;
-      }
-
-      .forum-form {
-        grid-template-columns: 1fr;
-      }
-
       .tag-admin-grid {
         grid-template-columns: 1fr;
       }
@@ -1457,7 +1269,6 @@
       <nav class="nav-links" aria-label="Navigation principale">
         <a href="#cours" data-open-courses>Cours</a>
         <a href="#actualites">Actualites</a>
-        <a href="#forum">Discussion</a>
         <a href="#faq">FAQ</a>
       </nav>
 
@@ -1574,41 +1385,6 @@
       </div>
     </section>
 
-    <section id="forum">
-      <div class="container">
-        <div class="section-head">
-          <h2>Discussion</h2>
-          <p>Un espace pour discuter en direct avec les comptes connectes.</p>
-        </div>
-
-        <div class="discussion-panel">
-          <div class="discussion-top">
-            <div class="discussion-channel">
-              <div class="discussion-icon">#</div>
-              <div>
-                <h3>discussion</h3>
-                <p>Messages synchronises avec Firebase Firestore.</p>
-              </div>
-            </div>
-            <span class="discussion-live">Temps reel</span>
-          </div>
-
-          <div class="forum-messages" id="messagesList">
-            <div class="empty-courses">Chargement des messages...</div>
-          </div>
-
-          <form class="forum-form" id="messageForm">
-            <div class="forum-input-wrap">
-              <label for="messageInput">Message</label>
-              <textarea id="messageInput" placeholder="Ecris ton message dans discussion..." required></textarea>
-            </div>
-            <button class="btn" type="submit" id="sendMessage">Envoyer</button>
-            <p class="forum-status" id="forumStatus">Connecte-toi pour envoyer un message.</p>
-          </form>
-        </div>
-      </div>
-    </section>
-
     <section id="faq">
       <div class="container">
         <div class="section-head">
@@ -1647,7 +1423,6 @@
         <a href="#accueil">Accueil</a>
         <a href="#actualites">Actualites</a>
         <a href="#cours">Cours</a>
-        <a href="#forum">Discussion</a>
         <a href="#faq">FAQ</a>
       </div>
     </div>
@@ -3289,6 +3064,5 @@
       }
     });
   </script>
-  <script type="module" src="script.js"></script>
 </body>
 </html>
