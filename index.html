@@ -482,18 +482,6 @@
       color: #b9ecff;
     }
 
-    .chat-tag {
-      margin-left: 5px;
-      padding: 2px 6px;
-      border-radius: 4px;
-      color: white;
-      font-size: 11px;
-      font-weight: 900;
-      line-height: 1.2;
-      text-transform: uppercase;
-      vertical-align: middle;
-    }
-
     .faq {
       display: grid;
       gap: 10px;
@@ -1046,25 +1034,6 @@
       color: var(--text);
     }
 
-    .profile-actions {
-      display: grid;
-      gap: 10px;
-    }
-
-    .profile-color-row {
-      display: grid;
-      grid-template-columns: 1fr 54px;
-      gap: 10px;
-      align-items: end;
-    }
-
-    .profile-color-row input[type="color"] {
-      min-height: 46px;
-      margin-bottom: 0;
-      padding: 4px;
-      cursor: pointer;
-    }
-
     .profile-status {
       margin: 0;
       color: var(--muted);
@@ -1074,90 +1043,6 @@
 
     .profile-status.is-error {
       color: #fecaca;
-    }
-
-    .tag-admin-panel {
-      display: none;
-      margin-top: 18px;
-      padding-top: 18px;
-      border-top: 1px solid var(--line);
-    }
-
-    .tag-admin-panel.is-visible {
-      display: block;
-    }
-
-    .tag-admin-panel h3 {
-      margin: 0 0 12px;
-      font-size: 1rem;
-    }
-
-    .tag-admin-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      gap: 14px;
-      margin-top: 14px;
-    }
-
-    .tag-admin-box {
-      padding: 14px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: rgba(255, 255, 255, 0.04);
-    }
-
-    .tag-list,
-    .user-tag-list {
-      display: grid;
-      gap: 10px;
-      max-height: 310px;
-      overflow: auto;
-    }
-
-    .tag-admin-item {
-      padding: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: var(--radius);
-      background: rgba(0, 0, 0, 0.18);
-    }
-
-    .tag-admin-item h4 {
-      margin: 0 0 6px;
-      font-size: 0.95rem;
-    }
-
-    .tag-admin-item p {
-      margin: 0 0 10px;
-      color: var(--muted);
-      font-size: 0.86rem;
-    }
-
-    .tag-admin-actions,
-    .user-tag-options {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .user-tag-options label {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      margin: 0;
-      padding: 6px 8px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: rgba(255, 255, 255, 0.04);
-      color: var(--text);
-      font-size: 0.82rem;
-      cursor: pointer;
-    }
-
-    .user-tag-options input {
-      width: auto;
-      min-height: auto;
-      margin: 0;
     }
 
     .form-grid {
@@ -1245,10 +1130,6 @@
       }
 
       .syllabus-item {
-        grid-template-columns: 1fr;
-      }
-
-      .tag-admin-grid {
         grid-template-columns: 1fr;
       }
 
@@ -1731,51 +1612,6 @@
         <strong id="authUserName">Compte connecte</strong>
         <span id="authUserEmail"></span>
         <p class="profile-status" id="accountRoleStatus">Role: utilisateur</p>
-
-        <div class="profile-actions">
-          <div class="profile-color-row">
-            <div>
-              <label for="usernameColorPicker">Couleur du pseudo</label>
-              <p class="profile-status">Cette couleur apparaitra dans tes messages.</p>
-            </div>
-            <input id="usernameColorPicker" type="color" value="#b9ecff" aria-label="Couleur du pseudo">
-          </div>
-          <p class="profile-status" id="profileStatus">Couleur de pseudo prete.</p>
-        </div>
-
-        <div class="tag-admin-panel" id="tagAdminPanel">
-          <h3>Gestion des tags</h3>
-          <p class="profile-status" id="tagAdminStatus">Reserve aux administrateurs Firebase.</p>
-
-          <form id="tagForm">
-            <input id="editingTagId" type="hidden" value="">
-
-            <label for="tagName">Nom du tag</label>
-            <input id="tagName" type="text" placeholder="Ex: VIP" required>
-
-            <label for="tagColor">Couleur du tag</label>
-            <input id="tagColor" type="color" value="#ffcc00">
-
-            <label for="tagDescription">Description</label>
-            <textarea id="tagDescription" placeholder="Ex: Membre premium"></textarea>
-
-            <button class="btn" type="submit" id="saveTag">Creer le tag</button>
-            <button class="btn secondary" type="button" id="cancelTagEdit">Annuler</button>
-          </form>
-
-          <div class="tag-admin-grid">
-            <div class="tag-admin-box">
-              <h3>Tags</h3>
-              <div class="tag-list" id="tagList"></div>
-            </div>
-
-            <div class="tag-admin-box">
-              <h3>Utilisateurs</h3>
-              <div class="user-tag-list" id="userTagList"></div>
-            </div>
-          </div>
-        </div>
-
         <button class="btn secondary" type="button" id="logoutAccount">Se deconnecter</button>
       </div>
 
@@ -2861,7 +2697,15 @@
     initVisitorGate();
   </script>
   <script type="module">
-    import { firebaseConfig } from "./firebase-config.js";
+    const firebaseConfig = {
+      apiKey: "REMPLACE_MOI",
+      authDomain: "TON-PROJET.firebaseapp.com",
+      projectId: "TON-PROJET",
+      storageBucket: "TON-PROJET.firebasestorage.app",
+      messagingSenderId: "REMPLACE_MOI",
+      appId: "REMPLACE_MOI",
+      measurementId: "REMPLACE_MOI"
+    };
 
     const authModal = document.querySelector("#authModal");
     const openAuth = document.querySelector("#openAuth");
@@ -2999,7 +2843,7 @@
     if (!firebaseIsConfigured) {
       setFormsDisabled(true);
       accountStatus.textContent = "";
-      setAuthStatus("Firebase n'est pas encore configure. Remplis firebase-config.js.", true);
+      setAuthStatus("Firebase n'est pas encore configure. Remplis firebaseConfig dans index.html.", true);
     } else {
       initFirebaseAuth();
     }
