@@ -1928,21 +1928,10 @@
     }
 
     function initVisitorGate() {
-      const currentVisitor = sessionStorage.getItem(VISITOR_SESSION_KEY);
-
-      if (!currentVisitor) {
-        openAccessGate();
-        return;
-      }
-
-      const access = canVisitorAccess(currentVisitor);
-      if (!access.allowed) {
-        sessionStorage.removeItem(VISITOR_SESSION_KEY);
-        openAccessGate(access.message);
-        return;
-      }
-
-      closeAccessGate(currentVisitor);
+      document.body.classList.remove("gate-locked");
+      accessGate.classList.remove("is-open");
+      accessGate.setAttribute("aria-hidden", "true");
+      setVisitorGreeting("");
     }
 
     function renderClassList() {
